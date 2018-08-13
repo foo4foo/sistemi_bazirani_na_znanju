@@ -10,5 +10,11 @@ Rails.application.routes.draw do
         end
       end
     end
+
+    resources :illnesses do
+      member do
+        resources :symptoms
+      end
+    end
   end
 end
