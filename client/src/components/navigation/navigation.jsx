@@ -8,6 +8,8 @@ import Anchor from 'grommet/components/Anchor';
 import Footer from 'grommet/components/Footer';
 import User from 'grommet/components/icons/base/User';
 import HomeIcon from 'grommet/components/icons/base/Home';
+import AidIcon from 'grommet/components/icons/base/Aid';
+import GrowIcon from 'grommet/components/icons/base/Grow';
 import Box from 'grommet/components/Box';
 
 import './navigation.css';
@@ -23,15 +25,9 @@ export class Navigation extends Component {
         </Header>
         <Box flex='grow' justify='start'>
           <Menu primary={true}>
-            <Anchor href='#' className='active'>
-              Home
-            </Anchor>
-            <Anchor href='#'>
-              New Case
-            </Anchor>
-            <Anchor href='#'>
-              Intesive Care
-            </Anchor>
+            <Anchor icon={< HomeIcon />} href='#' className='active' label="Home"/>
+            <Anchor icon={< AidIcon />} href='#' label="New Case"/>
+            <Anchor icon={< GrowIcon />} href='#' label="Intesive Care"/>
           </Menu>
         </Box>
         <Footer pad='medium'>

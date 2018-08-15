@@ -6,26 +6,28 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import './App.css';
 import '../node_modules/grommet-css';
 
+import Grommet from 'grommet';
+
 import Login from './components/session/login';
-import Header from './components/header';
 import Index from './containers/home';
 
 class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-      <div>
-        <Header />
-        <main>
-          <Router>
-            <Switch>
-              <Route exact path="/" component={Index} />
-              <Route exact path="/login" component={Login} />
-            </Switch>
-          </Router>
-        </main>
-      </div>
-      </Provider>
+      <Grommet.App centered={false}>
+        <Provider store={store}>
+          <div>
+            <main>
+              <Router>
+                <Switch>
+                  <Route exact path="/" component={Index} />
+                  <Route exact path="/login" component={Login} />
+                </Switch>
+              </Router>
+            </main>
+          </div>
+        </Provider>
+      </Grommet.App>
     );
   }
 }
