@@ -1,0 +1,22 @@
+.home-container {
+  margin-top: 1%;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border-right: 1px solid #cdcdcd;
+  border-left: 1px solid #cdcdcd;
+  overflow: auto;
+  position: absolute;
+  right: -10px;
+  left: 17%;
+}
+
+.twitter-container {
+  height: 100vh;
+  overflow: scroll;
+}
+
+.twitter-widget-0 {
+  height: 200px;
+  overflow: scroll;
+}

@@ -1,19 +1,31 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { Provider } from 'react-redux';
+import store from './store';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import './App.css';
+import '../node_modules/grommet-css';
+
+import Login from './components/session/login';
+import Header from './components/header';
+import Index from './containers/home';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+      <Provider store={store}>
+      <div>
+        <Header />
+        <main>
+          <Router>
+            <Switch>
+              <Route exact path="/" component={Index} />
+              <Route exact path="/login" component={Login} />
+            </Switch>
+          </Router>
+        </main>
       </div>
+      </Provider>
     );
   }
 }

@@ -26,6 +26,9 @@ class UsersController < ApplicationController
     end
   end
 
+  def sign_out
+  end
+
   private
 
   def set_user_by_invitation_token
