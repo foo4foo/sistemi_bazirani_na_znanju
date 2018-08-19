@@ -1,0 +1,46 @@
+.patients-container {
+  height: 100%;
+  position: relative;
+}
+
+.patients-search {
+  width: 100%;
+  margin-right: 5px;
+}
+
+.footer {
+  bottom: 25px;
+  position: absolute;
+}
+
+.patients {
+  margin-top: 30px;
+}
+
+.patient {
+  height: 20%;
+  border-right: 1px solid #cdcdcd;
+  border-left: 1px solid #cdcdcd;
+  margin-right: 5px;
+  margin-left: 5px;
+  margin-top: 15px;
+}
+
+.patient-center-col {
+  display: flex;
+  align-items: center;
+}
+
+.patient-side-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-right: 1px solid #cdcdcd;
+}
+
+.diagnosis-date-holder {
+  text-align: center;
+  border-left: 1px solid #cdcdcd;
+  border-right: 0;
+}

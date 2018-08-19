@@ -9,7 +9,8 @@ import '../node_modules/grommet-css';
 import Grommet from 'grommet';
 
 import Login from './components/session/login';
-import Index from './containers/home';
+import Patients from './containers/patients';
+import PrivateRoute from './privateRoute';
 
 class App extends Component {
   render() {
@@ -20,7 +21,11 @@ class App extends Component {
             <main>
               <Router>
                 <Switch>
-                  <Route exact path="/" component={Index} />
+                  <PrivateRoute
+                    component={Patients}
+                    exact
+                    path={'/'}
+                  />
                   <Route exact path="/login" component={Login} />
                 </Switch>
               </Router>

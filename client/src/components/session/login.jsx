@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withRouter} from 'react-router-dom'
 import {bindActionCreators} from 'redux'
 import {connect} from 'react-redux'
-import {login} from '../../actions/session';
+import {requestLogin} from '../../actions/session';
 
 import Split from 'grommet/components/Split';
 import Box from 'grommet/components/Box';
@@ -17,12 +17,7 @@ class Login extends Component {
   submitForm = data => {
     this
       .props
-      .login(data, () => {
-        this
-          .props
-          .history
-          .push('/');
-      });
+      .requestLogin(data);
   }
 
   render() {
@@ -48,10 +43,10 @@ class Login extends Component {
   }
 }
 
-const mapStateToProps = state => ({jwt: state.jwt, error: state.error})
+const mapStateToProps = state => ({jwt: state.jwt, error: state.error});
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  login
-}, dispatch)
+  requestLogin
+}, dispatch);
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Login))

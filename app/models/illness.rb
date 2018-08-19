@@ -1,6 +1,6 @@
 class Illness < ApplicationRecord
-  has_many :symptoms
-  belongs_to :illness_group
+  has_and_belongs_to_many :symptoms
+  has_and_belongs_to_many :patients
 
   scope :match, -> (symptoms) { joins(:symptoms).where('symptoms.id': symptoms) }
 end

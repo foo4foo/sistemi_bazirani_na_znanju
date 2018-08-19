@@ -1,33 +1,7 @@
-import axios from 'axios'
+export const LOGIN_USER = 'users/LOGIN_USER';
+export const LOGIN_USER_SUCCESS = 'users/LOGIN_USER_SUCCESS';
+export const LOGIN_USER_FAILURE = 'users/LOGIN_USER_FAILURE';
 
-import { LOGIN_USER, LOGIN_USER_SUCCESS, LOGIN_USER_FAILURE } from '../reducers/users';
-
-export function login(data, callback) {
-  return dispatch => {
-    dispatch({ type: LOGIN_USER });
-
-    axios({
-      url: `http://localhost:3000/api/users/session/sign_in`,
-      method: 'POST',
-      data: {
-        email: data.username,
-        password: data.password
-      },
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      }
-    }).then((response) => {
-      if ( response.data !== 'error' ) {
-        localStorage.setItem('jwt', response.data.token);
-        dispatch({ type: LOGIN_USER_SUCCESS, payload: response.data });
-        callback();
-      } else {
-        dispatch({ type: LOGIN_USER_FAILURE, payload: response.message });
-      }
-    })
-      .catch((error) => {
-        dispatch({ type: LOGIN_USER_FAILURE, payload: { message: 'Email and/or password is invalid.' } });
-      })
-  }
-};
+export const requestLogin = (data) => ({ type: LOGIN_USER, payload: data });
+export const login = (data) => ({ type: LOGIN_USER_SUCCESS, payload: data });
+export const loginFailure = () => ({ type: LOGIN_USER_FAILURE });

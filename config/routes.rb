@@ -11,6 +11,8 @@ Rails.application.routes.draw do
       end
     end
 
+    resources :patients, only: [:create, :search]
+
     resources :illnesses do
       member do
         resources :symptoms

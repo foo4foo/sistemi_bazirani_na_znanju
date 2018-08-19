@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_13_200901) do
+ActiveRecord::Schema.define(version: 2018_08_16_194657) do
 
   create_table "allergens", force: :cascade do |t|
     t.string "name"
@@ -18,17 +18,41 @@ ActiveRecord::Schema.define(version: 2018_08_13_200901) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "illness_groups", force: :cascade do |t|
-    t.string "name"
+  create_table "diagnoses", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "patient_id"
+    t.integer "patient_file_id"
+    t.index ["patient_file_id"], name: "index_diagnoses_on_patient_file_id"
+    t.index ["patient_id"], name: "index_diagnoses_on_patient_id"
+  end
+
+  create_table "diagnoses_illnesses", id: false, force: :cascade do |t|
+    t.integer "diagnosis_id", null: false
+    t.integer "illness_id", null: false
+  end
+
+  create_table "diagnoses_symptoms", id: false, force: :cascade do |t|
+    t.integer "symptom_id", null: false
+    t.integer "diagnosis_id", null: false
   end
 
   create_table "illnesses", force: :cascade do |t|
     t.string "name"
     t.string "description"
+    t.integer "group"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "illnesses_patients", id: false, force: :cascade do |t|
+    t.integer "patient_id", null: false
+    t.integer "illness_id", null: false
+  end
+
+  create_table "illnesses_symptoms", id: false, force: :cascade do |t|
+    t.integer "symptom_id", null: false
+    t.integer "illness_id", null: false
   end
 
   create_table "ingredients", force: :cascade do |t|
@@ -43,19 +67,40 @@ ActiveRecord::Schema.define(version: 2018_08_13_200901) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "patient_files", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "patient_id"
+    t.index ["patient_id"], name: "index_patient_files_on_patient_id"
+  end
+
+  create_table "patients", force: :cascade do |t|
+    t.string "email"
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "birth_date"
+    t.float "height"
+    t.float "weight"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles", force: :cascade do |t|
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "roles_users", id: false, force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "role_id", null: false
+  end
+
   create_table "symptoms", force: :cascade do |t|
     t.string "name"
-    t.integer "type"
+    t.integer "symptom_type", default: 0
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "illness_id"
-    t.index ["illness_id"], name: "index_symptoms_on_illness_id"
   end
 
   create_table "users", force: :cascade do |t|

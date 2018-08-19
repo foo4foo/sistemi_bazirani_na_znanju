@@ -19,6 +19,8 @@ gem 'bcrypt', '~> 3.1.7'
 
 gem 'sidekiq'
 
+gem 'durable_rules'
+
 gem "pundit"
 
 # Use ActiveStorage variant
