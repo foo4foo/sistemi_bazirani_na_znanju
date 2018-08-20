@@ -6,6 +6,12 @@ class IllnessesController < ApplicationController
     @illnesses = Illness.all
   end
 
+  def search
+    @illnesses = Illness.includes(:symptoms)
+                        .by_name(search_illnesses_params[:name])
+                        .page(search_illnesses_params[:page])
+  end
+
   def create
     @illness = Illness.new(illness_params)
     @illness.group = @group
@@ -31,5 +37,9 @@ class IllnessesController < ApplicationController
 
   def illness_params
     params.require(:illness).permit(:name, :description)
+  end
+
+  def search_illnesses_params
+    params.permit(:name, :page)
   end
 end

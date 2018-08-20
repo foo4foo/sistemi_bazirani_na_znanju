@@ -21,7 +21,9 @@ gem 'sidekiq'
 
 gem 'durable_rules'
 
-gem "pundit"
+gem 'pundit'
+
+gem 'kaminari'
 
 # Use ActiveStorage variant
 # gem 'mini_magick', '~> 4.8'

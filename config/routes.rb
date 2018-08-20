@@ -14,6 +14,9 @@ Rails.application.routes.draw do
     resources :patients, only: [:create, :search]
 
     resources :illnesses do
+      collection do
+        get 'search'
+      end
       member do
         resources :symptoms
       end

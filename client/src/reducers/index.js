@@ -1,8 +1,10 @@
-import users from './users';
-import { combineReducers } from 'redux';
+import users from "./users";
+import illnesses from "./illnesses";
+import { combineReducers } from "redux";
 
 const rootReducer = combineReducers({
-  users
+  users,
+  illnesses
 });
 
 export default rootReducer;

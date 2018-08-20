@@ -1,42 +1,39 @@
-import React, {Component} from 'react';
+import React, { Component } from "react";
 
-import {withRouter} from 'react-router-dom';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
+import { withRouter } from "react-router-dom";
+import { bindActionCreators } from "redux";
+import { connect } from "react-redux";
 
-import {Row, Col} from 'react-flexbox-grid';
+import { Row, Col } from "react-flexbox-grid";
 
-import GroupIcon from 'grommet/components/icons/base/Group';
-import TestIcon from 'grommet/components/icons/base/Test';
-import TriggerIcon from 'grommet/components/icons/base/Trigger';
-import AedIcon from 'grommet/components/icons/base/Aed';
-import {
-  Paragraph,
-  Box,
-  Title,
-  Header,
-  Footer,
-  Select
-} from 'grommet';
+import GroupIcon from "grommet/components/icons/base/Group";
+import TestIcon from "grommet/components/icons/base/Test";
+import TriggerIcon from "grommet/components/icons/base/Trigger";
+import AedIcon from "grommet/components/icons/base/Aed";
+import { Paragraph, Box, Title, Header, Select } from "grommet";
 
-import './patients.css';
+import "./patients.css";
 
 class Patients extends Component {
-
   render() {
     return (
       <div className="patients-container">
-        <Header splash={false} size='small' float={false} fixed={false}>
-          <GroupIcon/>
-          <Box flex={true} justify='end' direction='row' responsive={false}>
+        <Header splash={false} size="small" float={false} fixed={false}>
+          <GroupIcon />
+          <Box flex={true} justify="end" direction="row" responsive={false}>
             <Select
               className="patients-search"
-              placeHolder='Search patients ...'
+              placeHolder="Search patients ..."
               inline={false}
               multiple={false}
               onSearch={false}
-              options={['Patients will possible chronical illnesses', 'Possible addicts', 'Patients will immunity issues']}
-              value={undefined}/>
+              options={[
+                "Patients will possible chronical illnesses",
+                "Possible addicts",
+                "Patients will immunity issues"
+              ]}
+              value={undefined}
+            />
           </Box>
         </Header>
         <div className="patients">
@@ -44,8 +41,8 @@ class Patients extends Component {
             <Row>
               <Col md={2} className="patient-side-col">
                 <div>
-                  <TestIcon size="large" colorIndex="ok"/>
-                  <br/>
+                  <TestIcon size="large" colorIndex="ok" />
+                  <br />
                   <span>Addiction issues</span>
                 </div>
               </Col>
@@ -67,8 +64,8 @@ class Patients extends Component {
             <Row>
               <Col md={2} className="patient-side-col">
                 <div>
-                  <AedIcon size="large" colorIndex="accent-2"/>
-                  <br/>
+                  <AedIcon size="large" colorIndex="accent-2" />
+                  <br />
                   <span>Immunity Issues</span>
                 </div>
               </Col>
@@ -90,8 +87,8 @@ class Patients extends Component {
             <Row>
               <Col md={2} className="patient-side-col">
                 <div>
-                  <TriggerIcon size="large" colorIndex="critical"/>
-                  <br/>
+                  <TriggerIcon size="large" colorIndex="critical" />
+                  <br />
                   <span>Chronical issues</span>
                 </div>
               </Col>
@@ -110,28 +107,18 @@ class Patients extends Component {
             </Row>
           </div>
         </div>
-        <Footer justify='between' className="footer">
-          <Title>
-            <TriggerIcon colorIndex="brand"/>
-          </Title>
-          <Box
-            direction='row'
-            align='center'
-            pad={{
-            "between": "medium"
-          }}>
-            <Paragraph margin='none'>
-              © 2018 Vivacious Giddy
-            </Paragraph>
-          </Box>
-        </Footer>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = state => ({user: state.users.user});
+const mapStateToProps = state => ({ user: state.users.user });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Patients))
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(Patients)
+);
