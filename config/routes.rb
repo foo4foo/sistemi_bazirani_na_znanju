@@ -21,5 +21,9 @@ Rails.application.routes.draw do
         resources :symptoms
       end
     end
+
+    resources :symptoms, only: [:create, :destroy, :index] do
+      get 'search', on: :collection
+    end
   end
 end

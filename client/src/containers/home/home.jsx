@@ -14,6 +14,9 @@ import Illnesses from "../../components/illnesses/illnesses";
 import Symptoms from "../../components/symptoms/symptoms";
 
 import { searchIllnesses } from "../../actions/illnesses";
+import { searchSymptoms } from "../../actions/symptoms";
+
+import "./home.css";
 
 class Home extends Component {
   constructor(props) {
@@ -26,15 +29,18 @@ class Home extends Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
-    console.log(newProps);
-  }
+  componentWillReceiveProps(newProps) {}
 
   handleTextInput = event => {
     const { currentPage, filter } = this.state;
     this.setState({ pattern: event.target.value });
     if (filter === "illnesses") {
       this.props.searchIllnesses({
+        name: event.target.value,
+        page: currentPage
+      });
+    } else {
+      this.props.searchSymptoms({
         name: event.target.value,
         page: currentPage
       });
@@ -50,7 +56,7 @@ class Home extends Component {
     const { illnesses, symptoms } = this.props;
 
     return (
-      <div className="patients-container">
+      <div className="illnesses-symptoms-container">
         <Header splash={false} size="small" float={false} fixed={false}>
           <InfoIcon />
           <Box flex={true} justify="end" direction="row" responsive={false}>
@@ -87,7 +93,11 @@ class Home extends Component {
             </Menu>
           </Box>
         </Header>
-        {filter === "illnesses" ? <Illnesses data={illnesses} /> : <Symptoms />}
+        {filter === "illnesses" ? (
+          <Illnesses data={illnesses} />
+        ) : (
+          <Symptoms data={symptoms} />
+        )}
       </div>
     );
   }
@@ -95,13 +105,16 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   illnesses: state.illnesses.data,
-  page: state.illnesses.page
+  symptoms: state.symptoms.data,
+  illnessesPage: state.illnesses.page,
+  symptomsPage: state.symptoms.page
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      searchIllnesses
+      searchIllnesses,
+      searchSymptoms
     },
     dispatch
   );

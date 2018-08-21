@@ -9,7 +9,7 @@ export default class Illnesses extends Component {
   renderIllness = illness => {
     return (
       <div className="illness">
-        <AedIcon />
+        <AedIcon colorIndex="accent-2" />
         <p className="illness-name">{illness.name}</p>{" "}
       </div>
     );
@@ -30,8 +30,10 @@ export default class Illnesses extends Component {
               <AccordionPanel key={i} heading={this.renderIllness(illness)}>
                 <Paragraph>Symptoms:</Paragraph>
                 <div className="illness-symptoms">
-                  {illness.symptoms.map((symptom, si) => {
-                    return <Paragraph>{` - ${symptom.name}`}</Paragraph>;
+                  {illness.symptoms.map((symptom, is) => {
+                    return (
+                      <Paragraph key={is}>{` - ${symptom.name}`}</Paragraph>
+                    );
                   })}
                 </div>
               </AccordionPanel>
