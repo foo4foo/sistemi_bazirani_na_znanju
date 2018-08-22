@@ -31,8 +31,12 @@ export class Navigation extends Component {
               label="Home"
             />
             <Anchor icon={<GroupIcon />} href="/patients" label="Patients" />
-            <Anchor icon={<AidIcon />} href="#" label="New Case" />
-            <Anchor icon={<GrowIcon />} href="#" label="Intesive Care" />
+            <Anchor icon={<AidIcon />} href="/new_case" label="New Case" />
+            <Anchor
+              icon={<GrowIcon />}
+              href="/intesive_care"
+              label="Intesive Care"
+            />
           </Menu>
         </Box>
         <Footer pad="medium">

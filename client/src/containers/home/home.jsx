@@ -56,7 +56,7 @@ class Home extends Component {
     const { illnesses, symptoms } = this.props;
 
     return (
-      <div className="illnesses-symptoms-container">
+      <div className="index-container">
         <Header splash={false} size="small" float={false} fixed={false}>
           <InfoIcon />
           <Box flex={true} justify="end" direction="row" responsive={false}>
