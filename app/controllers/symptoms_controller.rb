@@ -1,4 +1,4 @@
-class SymptomsController < ApplicationController
+class SymptomsController < ApiController
   def index
     @symptoms = Symptom.all
   end

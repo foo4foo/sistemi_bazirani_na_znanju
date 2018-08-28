@@ -1,4 +1,4 @@
-class IllnessesController < ApplicationController
+class IllnessesController < ApiController
   before_action :set_illness, only: [:destroy, :update]
 
   def index

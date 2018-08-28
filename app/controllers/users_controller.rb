@@ -1,4 +1,4 @@
-class UsersController < ApplicationController
+class UsersController < ApiController
   skip_before_action :authenticate_user, only: %w[sign_in create verify]
   before_action :set_user, only: [:sign_in]
   before_action :passwords_match?, only: [:create]

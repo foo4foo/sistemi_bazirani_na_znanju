@@ -1,4 +1,4 @@
-class PatientsController < ApplicationController
+class PatientsController < ApiController
   def search
     # @patients = Patient.search(patient_search_params[:patient_group])
   end

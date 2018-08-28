@@ -18,8 +18,7 @@ gem 'redis', '~> 4.0'
 gem 'bcrypt', '~> 3.1.7'
 
 gem 'sidekiq'
-
-gem 'durable_rules'
+gem 'activeadmin'
 
 gem 'pundit'
 
