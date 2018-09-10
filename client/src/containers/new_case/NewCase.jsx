@@ -6,13 +6,14 @@ import {
   Header,
   Box,
   Search,
-  Select,
   Button,
   TextInput,
   FormField,
   Distribution,
   Label
 } from "grommet";
+
+import PatientFileModal from "../../components/patient_file_modal/PatientFileModal";
 
 import { Row, Col } from "react-flexbox-grid";
 
@@ -27,10 +28,10 @@ class NewCase extends React.Component {
     super(props);
 
     this.state = {
-      newFileModalOpened: false,
-      illnessIndexPath: []
+      newFileModalOpened: false
     };
   }
+
   onSelectSymptom(selected) {
     console.log(selected.suggestion);
   }
@@ -44,14 +45,16 @@ class NewCase extends React.Component {
     // find file with this id
   }
 
-  toggleModal() {
+  toggleModal = () => {
+    const { newFileModalOpened } = this.state;
+
     this.setState({
-      newFileModalOpened: !this.state.newFileModalOpened
+      newFileModalOpened: !newFileModalOpened
     });
-  }
+  };
 
   render() {
-    const { illnessIndexPath } = this.state;
+    const { newFileModalOpened } = this.state;
 
     return (
       <div>
@@ -79,20 +82,15 @@ class NewCase extends React.Component {
           </Box>
         </Header>
         <div className="file-btn-container">
-          <Button label="Create File" onClick={this.toggleModal} />
+          <Button label="New File" onClick={this.toggleModal} />
         </div>
         <Row className="form-row-container">
-          <Col md={4}>
-            <FormField label="Name">
-              <TextInput id="item1" name="item-1" value="Pera" />
-            </FormField>
-          </Col>
-          <Col md={6}>
-            <FormField label="Surname">
-              <TextInput id="item1" name="item-1" value="Peric" />
-            </FormField>
-          </Col>
+          <Col md={4} />
+          <Col md={6} />
           <Col md={2}>
+            {newFileModalOpened && (
+              <PatientFileModal closeModal={this.toggleModal} />
+            )}
             <FormField label="File ID">
               <TextInput
                 id="item1"

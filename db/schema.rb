@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 2018_08_28_190315) do
     t.float "weight"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_patients_on_email", unique: true
   end
 
   create_table "roles", force: :cascade do |t|

@@ -15,6 +15,7 @@ class ApiController < ActionController::API
 
   def authenticate_user
     cookie = request.headers['Authorization']
+    puts cookie
 
     # jwt secret key will be read from env var
     json = JwtUtil.decode(cookie) unless cookie.nil?

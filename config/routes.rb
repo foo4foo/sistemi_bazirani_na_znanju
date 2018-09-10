@@ -26,5 +26,9 @@ Rails.application.routes.draw do
     resources :symptoms, only: [:create, :destroy, :index] do
       get 'search', on: :collection
     end
+
+    resources :allergens, only: [:index]
+
+    resources :patient_files
   end
 end
