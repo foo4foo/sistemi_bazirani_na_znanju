@@ -10,7 +10,8 @@ import {
   TextInput,
   FormField,
   Distribution,
-  Label
+  Label,
+  Toast
 } from "grommet";
 
 import PatientFileModal from "../../components/patient_file_modal/PatientFileModal";
@@ -55,6 +56,7 @@ class NewCase extends React.Component {
 
   render() {
     const { newFileModalOpened } = this.state;
+    const { patientFile } = this.props;
 
     return (
       <div>
@@ -82,15 +84,21 @@ class NewCase extends React.Component {
           </Box>
         </Header>
         <div className="file-btn-container">
-          <Button label="New File" onClick={this.toggleModal} />
+          {!patientFile.patient && (
+            <Button label="New File" onClick={this.toggleModal} />
+          )}
         </div>
         <Row className="form-row-container">
+          {patientFile.patient && (
+            <Toast status="ok">Patient file successfuly created</Toast>
+          )}
           <Col md={4} />
           <Col md={6} />
           <Col md={2}>
-            {newFileModalOpened && (
-              <PatientFileModal closeModal={this.toggleModal} />
-            )}
+            {newFileModalOpened &&
+              !patientFile.patient && (
+                <PatientFileModal closeModal={this.toggleModal} />
+              )}
             <FormField label="File ID">
               <TextInput
                 id="item1"
@@ -132,7 +140,7 @@ class NewCase extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({ patientFile: state.patient_files.data });
 
 const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
 

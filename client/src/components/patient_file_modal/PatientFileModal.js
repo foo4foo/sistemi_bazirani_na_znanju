@@ -1,5 +1,7 @@
 import React from "react";
 
+import moment from "moment";
+
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
@@ -14,17 +16,20 @@ import {
   Button,
   CheckBox,
   Heading,
-  Label
+  Label,
+  Toast
 } from "grommet";
 
 import { isEmpty, includes } from "lodash";
 
+import { createPatientFile } from "../../actions/patient_files";
 import { fetchAllergens } from "../../actions/allergens";
 
 import { Row, Col } from "react-flexbox-grid";
 
 class PatientFileModal extends React.Component {
   state = {
+    birthDate: moment().format("YYYY-MM-DD"),
     email: "",
     firstName: "",
     lastName: "",
@@ -57,8 +62,30 @@ class PatientFileModal extends React.Component {
     this.setState({ height: event.target.value });
   };
 
+  onDateChange = event => {
+    this.setState({ birthDate: moment(event).format("YYYY-MM-DD") });
+  };
+
   createFile = () => {
-    const { firstName, lastName, weight, height } = this.state;
+    const {
+      allergens,
+      birthDate,
+      email,
+      firstName,
+      lastName,
+      weight,
+      height
+    } = this.state;
+
+    this.props.createPatientFile({
+      allergens,
+      birthDate,
+      email,
+      firstName,
+      lastName,
+      weight,
+      height
+    });
   };
 
   renderAllergens(data) {
@@ -89,8 +116,15 @@ class PatientFileModal extends React.Component {
   }
 
   render() {
-    const { email, firstName, lastName, weight, height } = this.state;
-    const { allergens } = this.props;
+    const {
+      birthDate,
+      email,
+      firstName,
+      lastName,
+      weight,
+      height
+    } = this.state;
+    const { allergens, patientFileMessage, patientFileStatus } = this.props;
 
     return (
       <Layer
@@ -101,6 +135,9 @@ class PatientFileModal extends React.Component {
         overlayClose={true}
         onClose={this.props.closeModal}
       >
+        {patientFileStatus === "error" && (
+          <Toast status="critical">{patientFileMessage}</Toast>
+        )}
         <div style={{ width: 700 }}>
           <Form style={{ width: "100%" }}>
             <Row style={{ marginTop: 60 }}>
@@ -164,9 +201,12 @@ class PatientFileModal extends React.Component {
               <Col md={4}>
                 <FormField label="Birth Date" style={{ height: "100%" }}>
                   <DateTime
+                    style={{ marginTop: "8px" }}
                     id="birth-date"
                     name="birth-date"
                     format="M/D/YYYY"
+                    value={birthDate}
+                    onChange={this.onDateChange}
                   />
                 </FormField>
               </Col>
@@ -206,11 +246,16 @@ class PatientFileModal extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ allergens: state.allergens.data });
+const mapStateToProps = state => ({
+  allergens: state.allergens.data,
+  patientFileStatus: state.patient_files.data.status,
+  patientFileMessage: state.patient_files.data.message
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
+      createPatientFile,
       fetchAllergens
     },
     dispatch

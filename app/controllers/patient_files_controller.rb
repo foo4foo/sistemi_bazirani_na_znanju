@@ -1,6 +1,7 @@
 class PatientFilesController < ApiController
   def create
     @patient_file = PatientFile.new(patient_file_params)
+    @patient_file.patient.allergens = Allergen.where(id: params[:allergens])
 
     if @patient_file.save
       render
