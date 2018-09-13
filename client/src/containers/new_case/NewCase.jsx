@@ -3,7 +3,7 @@ import React from "react";
 import NodesIcon from "grommet/components/icons/base/Nodes";
 import CloseIcon from "grommet/components/icons/base/Close";
 
-import { isEmpty } from "lodash";
+import { isEmpty, isEqual, find } from "lodash";
 
 import {
   Header,
@@ -27,6 +27,8 @@ import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
+import { searchSymptoms } from "../../actions/symptoms";
+
 import "./NewCase.css";
 
 class NewCase extends React.Component {
@@ -35,22 +37,28 @@ class NewCase extends React.Component {
 
     this.state = {
       newFileModalOpened: false,
-      symptoms: []
+      symptomsSelected: []
     };
   }
 
-  onSelectSymptom(selected) {
-    console.log(selected.suggestion);
-  }
+  onSelectSymptom = selected => {
+    if (
+      !this.state.symptomsSelected.find(s => isEqual(s, selected.suggestion))
+    ) {
+      this.setState({
+        symptomsSelected: [...this.state.symptomsSelected, selected.suggestion]
+      });
+    }
+  };
 
-  onTextChange(event) {
-    console.log(event.target.value);
-  }
+  onTextChange = event => {
+    this.props.searchSymptoms({ name: event.target.value });
+  };
 
-  onFileIdChange(event) {
+  onFileIdChange = event => {
     console.log(event.target.value);
     // find file with this id
-  }
+  };
 
   toggleModal = () => {
     const { newFileModalOpened } = this.state;
@@ -60,9 +68,42 @@ class NewCase extends React.Component {
     });
   };
 
+  renderSelectedSymptoms = symptomsSelected => {
+    return symptomsSelected.map((symptom, id) => {
+      return (
+        <ListItem key={id} justify="between" separator="horizontal">
+          <span>{symptom.label}</span>
+          <span className="secondary">
+            <CloseIcon
+              onClick={() =>
+                this.setState({
+                  symptomsSelected: symptomsSelected.filter(
+                    s => !isEqual(symptom, s)
+                  )
+                })
+              }
+              colorIndex="critical"
+              style={{
+                cursor: "pointer"
+              }}
+            />
+          </span>
+        </ListItem>
+      );
+    });
+  };
+
+  renderSymptomSuggestions = symptoms => {
+    if (symptoms) {
+      return symptoms.map(symptom => {
+        return { label: symptom.name, id: symptom.id };
+      });
+    }
+  };
+
   render() {
-    const { newFileModalOpened, symptoms } = this.state;
-    const { patientFile } = this.props;
+    const { newFileModalOpened, symptomsSelected } = this.state;
+    const { patientFile, symptoms } = this.props;
 
     return (
       <div>
@@ -76,16 +117,7 @@ class NewCase extends React.Component {
               size="medium"
               placeHolder="Search"
               onSelect={this.onSelectSymptom}
-              suggestions={[
-                {
-                  label: "Cough",
-                  id: 2
-                },
-                {
-                  label: "Leaky Nose",
-                  id: 1
-                }
-              ]}
+              suggestions={this.renderSymptomSuggestions(symptoms)}
             />
           </Box>
         </Header>
@@ -118,24 +150,11 @@ class NewCase extends React.Component {
         <br />
         <Row>
           <Col md={12}>
-            <List>
-              <ListItem justify="between" separator="horizontal">
-                <span>Cough</span>
-                <span className="secondary">
-                  <CloseIcon
-                    onClick={() => console.log("Cough")}
-                    colorIndex="critical"
-                    style={{
-                      cursor: "pointer"
-                    }}
-                  />
-                </span>
-              </ListItem>
-            </List>
+            <List>{this.renderSelectedSymptoms(symptomsSelected)}</List>
           </Col>
         </Row>
         <br />{" "}
-        {!isEmpty(symptoms) && (
+        {!isEmpty(symptomsSelected) && (
           <div className="illnesses-container">
             <Label>Illnesses most likely associated with symptoms</Label>
             <br />
@@ -168,9 +187,18 @@ class NewCase extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ patientFile: state.patient_files.data });
+const mapStateToProps = state => ({
+  patientFile: state.patient_files.data,
+  symptoms: state.symptoms.data
+});
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      searchSymptoms
+    },
+    dispatch
+  );
 
 export default withRouter(
   connect(

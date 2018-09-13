@@ -8,7 +8,6 @@ class IllnessesController < ApiController
   def search
     @illnesses = Illness.includes(:symptoms)
                         .by_name(search_illnesses_params[:name])
-                        .page(search_illnesses_params[:page])
   end
 
   def create
