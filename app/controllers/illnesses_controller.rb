@@ -10,16 +10,9 @@ class IllnessesController < ApiController
                         .by_name(search_illnesses_params[:name])
   end
 
-  def create
-    @illness = Illness.new(illness_params)
-
-    if @illness.save
-      render
-    end
-  end
-
-  def destroy
-    @illness.destroy
+  def match
+    # this will be updated. send req to external service
+    @possible_illnesses_data = Illness.first(4)
   end
 
   private
@@ -28,11 +21,11 @@ class IllnessesController < ApiController
     @illness = Illness.find(params[:illness_id])
   end
 
-  def illness_params
-    params.require(:illness).permit(:name, :description)
-  end
-
   def search_illnesses_params
     params.permit(:name, :page)
+  end
+
+  def match_params
+    params.permit(:symptoms)
   end
 end

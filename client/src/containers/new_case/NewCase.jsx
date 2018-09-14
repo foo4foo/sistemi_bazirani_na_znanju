@@ -3,7 +3,8 @@ import React from "react";
 import NodesIcon from "grommet/components/icons/base/Nodes";
 import CloseIcon from "grommet/components/icons/base/Close";
 
-import { isEmpty, isEqual, find } from "lodash";
+import { isEmpty, isEqual } from "lodash";
+import moment from "moment";
 
 import {
   Header,
@@ -11,8 +12,6 @@ import {
   Search,
   Button,
   TextInput,
-  FormField,
-  Distribution,
   Label,
   Toast,
   List,
@@ -20,13 +19,15 @@ import {
 } from "grommet";
 
 import PatientFileModal from "../../components/patient_file_modal/PatientFileModal";
-
+import PossibleIllnesses from "../../components/possible_illnesses";
 import { Row, Col } from "react-flexbox-grid";
 
 import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
+import { matchIllnesses } from "../../actions/illnesses";
+import { searchPatientFiles } from "../../actions/patient_files";
 import { searchSymptoms } from "../../actions/symptoms";
 
 import "./NewCase.css";
@@ -37,7 +38,8 @@ class NewCase extends React.Component {
 
     this.state = {
       newFileModalOpened: false,
-      symptomsSelected: []
+      symptomsSelected: [],
+      showDiagnosisForm: false
     };
   }
 
@@ -45,9 +47,13 @@ class NewCase extends React.Component {
     if (
       !this.state.symptomsSelected.find(s => isEqual(s, selected.suggestion))
     ) {
-      this.setState({
-        symptomsSelected: [...this.state.symptomsSelected, selected.suggestion]
-      });
+      const symptomsSelected = [
+        ...this.state.symptomsSelected,
+        selected.suggestion
+      ];
+      this.setState({ symptomsSelected });
+      // send check
+      this.props.matchIllnesses(symptomsSelected.map(s => s.id));
     }
   };
 
@@ -56,8 +62,12 @@ class NewCase extends React.Component {
   };
 
   onFileIdChange = event => {
-    console.log(event.target.value);
-    // find file with this id
+    const patientFileId = event.target.value;
+    this.props.searchPatientFiles(patientFileId);
+  };
+
+  showDiagnosisForm = () => {
+    this.setState({ showDiagnosisForm: true });
   };
 
   toggleModal = () => {
@@ -76,11 +86,17 @@ class NewCase extends React.Component {
           <span className="secondary">
             <CloseIcon
               onClick={() =>
-                this.setState({
-                  symptomsSelected: symptomsSelected.filter(
-                    s => !isEqual(symptom, s)
-                  )
-                })
+                this.setState(
+                  {
+                    symptomsSelected: symptomsSelected.filter(
+                      s => !isEqual(symptom, s)
+                    )
+                  },
+                  () =>
+                    this.props.matchIllnesses(
+                      this.state.symptomsSelected.map(s => s.id)
+                    )
+                )
               }
               colorIndex="critical"
               style={{
@@ -93,6 +109,43 @@ class NewCase extends React.Component {
     });
   };
 
+  renderPatientInfo = patient => {
+    return (
+      <Row>
+        <Col
+          md={4}
+          style={{
+            textAlign: "left"
+          }}
+        >
+          <Label>
+            <i>Name</i>: {patient.name}
+          </Label>
+        </Col>
+        <Col
+          md={4}
+          style={{
+            textAlign: "left"
+          }}
+        >
+          <Label>
+            <i>Surname</i>: {patient.surname}
+          </Label>
+        </Col>
+        <Col
+          md={4}
+          style={{
+            textAlign: "left"
+          }}
+        >
+          <Label>
+            <i>Birth Date</i>: {moment(patient.birthDate).format("DD-MM-YYYY")}
+          </Label>
+        </Col>
+      </Row>
+    );
+  };
+
   renderSymptomSuggestions = symptoms => {
     if (symptoms) {
       return symptoms.map(symptom => {
@@ -102,11 +155,18 @@ class NewCase extends React.Component {
   };
 
   render() {
-    const { newFileModalOpened, symptomsSelected } = this.state;
-    const { patientFile, symptoms } = this.props;
+    const {
+      newFileModalOpened,
+      symptomsSelected,
+      showDiagnosisForm
+    } = this.state;
+    const { patientFile, symptoms, createdMessage, illnesses } = this.props;
 
     return (
       <div>
+        {createdMessage === "Patient file created" && (
+          <Toast status="ok">Patient file successfuly created</Toast>
+        )}
         <Header splash={false} size="small" float={false} fixed={false}>
           <NodesIcon colorIndex="ok" />
           <Box flex={true} justify="end" direction="row" responsive={false}>
@@ -122,15 +182,12 @@ class NewCase extends React.Component {
           </Box>
         </Header>
         <Row className="form-row-container">
-          {patientFile.patient && (
-            <Toast status="ok">Patient file successfuly created</Toast>
-          )}
-          <Col md={4}>
+          <Col md={10}>
             {!patientFile.patient && (
               <Button label="New File" onClick={this.toggleModal} />
             )}
+            {patientFile.patient && this.renderPatientInfo(patientFile.patient)}
           </Col>
-          <Col md={6} />
           <Col md={2}>
             {newFileModalOpened &&
               !patientFile.patient && (
@@ -138,7 +195,7 @@ class NewCase extends React.Component {
               )}
             <TextInput
               style={{
-                marginRight: "10px"
+                width: "100%"
               }}
               placeHolder="File ID"
               id="item1"
@@ -155,32 +212,10 @@ class NewCase extends React.Component {
         </Row>
         <br />{" "}
         {!isEmpty(symptomsSelected) && (
-          <div className="illnesses-container">
-            <Label>Illnesses most likely associated with symptoms</Label>
-            <br />
-            <Distribution
-              series={[
-                {
-                  label: "Fever",
-                  value: 40
-                },
-                {
-                  label: "Cold",
-                  value: 30
-                },
-                {
-                  label: "Kindies",
-                  value: 20
-                },
-                {
-                  label: "Heart Issue",
-                  value: 10
-                }
-              ]}
-              units="%"
-              size="small"
-            />
-          </div>
+          <PossibleIllnesses
+            illnesses={illnesses}
+            showForm={this.showDiagnosisForm}
+          />
         )}
       </div>
     );
@@ -189,13 +224,17 @@ class NewCase extends React.Component {
 
 const mapStateToProps = state => ({
   patientFile: state.patient_files.data,
-  symptoms: state.symptoms.data
+  createdMessage: state.patient_files.message,
+  symptoms: state.symptoms.data,
+  illnesses: state.illnesses.data
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      searchSymptoms
+      searchSymptoms,
+      searchPatientFiles,
+      matchIllnesses
     },
     dispatch
   );

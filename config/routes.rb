@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :illnesses do
       collection do
         get 'search'
+        post 'match'
       end
       member do
         resources :symptoms

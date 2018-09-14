@@ -86,6 +86,7 @@ class PatientFileModal extends React.Component {
       weight,
       height
     });
+    this.props.closeModal();
   };
 
   renderAllergens(data) {

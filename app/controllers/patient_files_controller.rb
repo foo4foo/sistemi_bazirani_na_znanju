@@ -10,6 +10,10 @@ class PatientFilesController < ApiController
     end
   end
 
+  def show
+    @patient_file = PatientFile.find(params[:id])
+  end
+
   private
 
   def patient_file_params
