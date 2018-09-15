@@ -23,3 +23,6 @@ deploy:
     - "rake cleanup"
   on:
     repo: foo4foo/sistemi_bazirani_na_znanju
+    branches:
+      only:
+        - development
