@@ -2,12 +2,20 @@ import React from "react";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import FormCloseIcon from "grommet/components/icons/base/FormClose";
+import { fetchMedicines } from "../../actions/medicines";
 
 import { Row, Col } from "react-flexbox-grid";
-import { Animate, Distribution, Label, Button, Select, Title } from "grommet";
+import {
+  Animate,
+  Distribution,
+  Label,
+  Button,
+  Select,
+  Title,
+  Layer
+} from "grommet";
 
-import { isEqual, isEmpty } from "lodash";
+import { isEqual } from "lodash";
 
 class PossibleIllnesses extends React.Component {
   state = {
@@ -34,10 +42,10 @@ class PossibleIllnesses extends React.Component {
 
   render() {
     const { selectedIllness, selectedMedicines } = this.state;
-    const { illnesses } = this.props;
+    const { illnesses, medicines } = this.props;
 
     return (
-      <div className="illnesses-container">
+      <div>
         <Label>Illnesses most likely associated with symptoms</Label>
         <br />
         <Distribution
@@ -45,138 +53,137 @@ class PossibleIllnesses extends React.Component {
             return {
               label: i.name,
               value: parseInt(i.match, 10),
-              onClick: () => this.setState({ selectedIllness: i })
+              onClick: () => {
+                this.setState({ selectedIllness: i, selectedMedicines: [] });
+                this.props.fetchMedicines(i.id);
+              }
             };
           })}
           units="%"
           size="small"
         />
-        <br />
-        <Animate
-          visible={!!selectedIllness}
-          enter={{
-            animation: "slide-up",
-            duration: 300,
-            delay: 0
-          }}
-        >
-          <hr />{" "}
-          {!!selectedIllness && (
-            <Row
+        <br />{" "}
+        {!!selectedIllness && (
+          <Layer
+            style={{
+              marginTop: 50
+            }}
+            closer={true}
+            overlayClose={true}
+            onClose={() => this.setState({ selectedIllness: undefined })}
+          >
+            <Animate
               style={{
-                alignItems: "center"
+                width: window.innerWidth / 2.5
+              }}
+              visible={!!selectedIllness}
+              enter={{
+                animation: "slide-right",
+                duration: 500,
+                delay: 100
               }}
             >
-              <Col md={4}>
-                <Title>{selectedIllness.name}</Title>
-              </Col>
-              <Col md={4}>
-                <Select
-                  placeHolder="Medicines"
-                  multiple={true}
-                  options={[
-                    {
-                      label: "one",
-                      value: 1
-                    },
-                    {
-                      label: "two",
-                      value: 2
-                    },
-                    {
-                      label: "three",
-                      value: 3
-                    },
-                    {
-                      label: "four",
-                      value: 4
-                    },
-                    {
-                      label: "five",
-                      value: 5
-                    }
-                  ]}
-                  value={selectedMedicines}
-                  onChange={e => this.onSelectMedicine(e.option)}
-                />
-              </Col>
-              <Col
-                md={4}
-                style={{
-                  textAlign: "right"
-                }}
-              >
-                <Button
-                  label="Make Diagnosis"
-                  plain={false}
-                  primary
-                  onClick={() => console.log("submit")}
-                />
-              </Col>
-            </Row>
-          )}
-          <Row>
-            <Col md={12}>
-              <div
-                style={{
-                  textAlign: "left",
-                  display: "flex",
-                  flexDirection: "row",
-                  width: "100%"
-                }}
-              >
-                <div
+              {!!selectedIllness && (
+                <Row
                   style={{
-                    backgroundColor: "white",
-                    marginRight: 10,
-                    borderRadius: "20px",
-                    borderColor: "#DA0077",
-                    borderStyle: "solid",
-                    borderWidth: "1px"
+                    alignItems: "center",
+                    marginTop: "50px"
                   }}
                 >
-                  <span
+                  <Col md={8}>
+                    <Title>{selectedIllness.name}</Title>
+                  </Col>
+                  <Col
+                    md={4}
                     style={{
-                      color: "#DA0077",
-                      margin: "15px"
+                      textAlign: "right"
                     }}
                   >
-                    Brufen
-                  </span>
-                </div>
-                <div
+                    <Select
+                      placeHolder="Medicines"
+                      multiple={true}
+                      options={medicines.map(m => {
+                        return { label: m.name, value: m.id };
+                      })}
+                      value={selectedMedicines}
+                      onChange={e => this.onSelectMedicine(e.option)}
+                    />
+                  </Col>
+                </Row>
+              )}
+              <br />
+              <Row>
+                <Col md={12}>
+                  <div
+                    style={{
+                      textAlign: "left",
+                      display: "flex",
+                      flexDirection: "row",
+                      width: "100%"
+                    }}
+                  >
+                    {selectedMedicines.map((medicine, i) => {
+                      return (
+                        <div
+                          key={i}
+                          style={{
+                            backgroundColor: "white",
+                            marginRight: 10,
+                            borderRadius: "20px",
+                            borderColor: "#DA0077",
+                            borderStyle: "solid",
+                            borderWidth: "1px"
+                          }}
+                        >
+                          <span
+                            style={{
+                              color: "#DA0077",
+                              margin: "15px"
+                            }}
+                          >
+                            {medicine.label}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Col>
+              </Row>
+              <br />
+              <hr />
+              <Row>
+                <Col md={8} />
+                <Col
+                  md={4}
                   style={{
-                    backgroundColor: "white",
-                    marginRight: 10,
-                    borderRadius: "20px",
-                    borderColor: "#DA0077",
-                    borderStyle: "solid",
-                    borderWidth: "1px"
+                    textAlign: "right"
                   }}
                 >
-                  <span
-                    style={{
-                      color: "#DA0077",
-                      margin: "15px"
-                    }}
-                  >
-                    Brufen
-                  </span>
-                </div>
-              </div>
-            </Col>
-          </Row>
-          <br />
-          <hr />
-        </Animate>
+                  <Button
+                    label="Make Diagnosis"
+                    plain={false}
+                    onClick={() => console.log("submit")}
+                  />
+                </Col>
+              </Row>
+              <br />
+            </Animate>
+          </Layer>
+        )}
       </div>
     );
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({ medicines: state.medicines.data });
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      fetchMedicines
+    },
+    dispatch
+  );
 
 export default connect(
   mapStateToProps,

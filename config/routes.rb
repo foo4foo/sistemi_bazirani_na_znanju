@@ -20,6 +20,7 @@ Rails.application.routes.draw do
         post 'match'
       end
       member do
+        resources :medicines
         resources :symptoms
       end
     end

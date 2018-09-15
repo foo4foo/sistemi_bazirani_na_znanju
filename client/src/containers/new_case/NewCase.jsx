@@ -62,6 +62,7 @@ class NewCase extends React.Component {
   };
 
   onFileIdChange = event => {
+    this.setState({ symptomsSelected: [] });
     const patientFileId = event.target.value;
     this.props.searchPatientFiles(patientFileId);
   };
@@ -155,11 +156,7 @@ class NewCase extends React.Component {
   };
 
   render() {
-    const {
-      newFileModalOpened,
-      symptomsSelected,
-      showDiagnosisForm
-    } = this.state;
+    const { newFileModalOpened, symptomsSelected } = this.state;
     const { patientFile, symptoms, createdMessage, illnesses } = this.props;
 
     return (
@@ -204,12 +201,14 @@ class NewCase extends React.Component {
             />
           </Col>
         </Row>
-        <br />
-        <Row>
-          <Col md={12}>
-            <List>{this.renderSelectedSymptoms(symptomsSelected)}</List>
-          </Col>
-        </Row>
+        <br />{" "}
+        {patientFile.patient && (
+          <Row>
+            <Col md={12}>
+              <List>{this.renderSelectedSymptoms(symptomsSelected)}</List>
+            </Col>
+          </Row>
+        )}
         <br />{" "}
         {!isEmpty(symptomsSelected) && (
           <PossibleIllnesses

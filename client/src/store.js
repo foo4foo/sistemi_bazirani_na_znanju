@@ -7,6 +7,7 @@ import searchIllnessesSaga from "./sagas/illness_sagas";
 import searchSymptomsSaga from "./sagas/symptom_sagas";
 import fetchAllergensSaga from "./sagas/allergen_saga";
 import patientFilesSaga from "./sagas/patient_files_sagas";
+import medicineSaga from "./sagas/medicine_saga";
 
 const sagaMiddleware = createSagaMiddleware();
 
@@ -35,3 +36,4 @@ sagaMiddleware.run(searchIllnessesSaga);
 sagaMiddleware.run(searchSymptomsSaga);
 sagaMiddleware.run(fetchAllergensSaga);
 sagaMiddleware.run(patientFilesSaga);
+sagaMiddleware.run(medicineSaga);
