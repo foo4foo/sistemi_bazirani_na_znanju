@@ -1,1 +1,23 @@
 language: ruby
+cache:
+  - bundler
+before_script:
+  - bundle exec rake db:drop
+  - bundle exec rake db:create
+  - bundle exec rake db:migrate
+  - bundle exec rake db:seed
+  - bundle exec rspec
+deploy:
+  provider: heroku
+  api_key:
+    secure: XBiHP+cQ9cc0MjdhVaHKQROASbiE8kgO6iT203PCexUReypDjqPa4CgnM9hFrXoN0bTcin9mrHFoafcDWUXQ6nlVAlAbbJn4Oxw5enB/F6T9F1UElR59tEkm+dVRWuSJ/xvR/7qQNo/hR51kV+qVowb8jGCHueYsyaMzJXgQXCuapmLIPsY4ZrPYkYHzH7P9eDrcMkpliczCnoBqLJALkq12lmv0lsZXgdHRVR3Rn/jgz9tPYo9SBGUB5y/7O4vVtKNOeaGtBvwi3Cat9XlWDfxcrocdkhPRmS1NI0gx2H2LXl/s0KFw4P4IxbF7lyLU3tVdPA6XbNLfM58ICLrjhU7BWHnGAEwkO8CmsAruE99TgPC5vp6AlYUfA72yBBkQuV0rQig6ecTqtwOZbnHLl1bxdBiLdeFDBU3ndQ8TozVRcSO0J0RvSd2ECxiz+fzaf+tD0pV4ZHJ+rnZOiAnSNk8IBuK0tfzneSIBwWHWBOOuAHHMYGiNW9U66k/wi1XtLZ6OGhi399cd+rXPUVsteNpDFI7gsAswu+eohFv2VV626PEtVDE3FaWzopGapyofbbo1JUlKakru141G61Lx6BaS4AasdTGR5DEKm7aLHp405sKscQX+1MH5T4yWejwUzeKJxZ2T3Af/wo92cWgbZBagf6PpJMOQFhUFRp9XNXY=
+  app: sistemi-api
+  run:
+    - "rake db:drop"
+    - "rake db:create"
+    - "rake db:migrate"
+    - "rake db:seed"
+    - restart
+    - "rake cleanup"
+  on:
+    repo: foo4foo/sistemi_bazirani_na_znanju
