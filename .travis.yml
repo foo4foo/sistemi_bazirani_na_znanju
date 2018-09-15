@@ -18,7 +18,6 @@ deploy:
     - "rake db:migrate"
     - "rake db:seed"
     - restart
-    - "rake cleanup"
   on:
     repo: foo4foo/sistemi_bazirani_na_znanju
     branch: development
