@@ -24,13 +24,6 @@ module Sistemi
     config.active_job.queue_adapter = :sidekiq
     config.time_zone = "Europe/Belgrade"
 
-    if ENV['REDISTOGO_URL']
-      config.action_controller.perform_caching = true
-      config.cache_store = :redis_store
-    else
-      config.action_controller.perform_caching = false
-    end
-
     # Middleware for ActiveAdmin
     config.middleware.use Rack::MethodOverride
     config.middleware.use ActionDispatch::Flash
