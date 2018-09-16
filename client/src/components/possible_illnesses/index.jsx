@@ -12,7 +12,8 @@ import {
   Button,
   Select,
   Title,
-  Layer
+  Layer,
+  Notification
 } from "grommet";
 
 import { isEqual } from "lodash";
@@ -83,6 +84,20 @@ class PossibleIllnesses extends React.Component {
                 delay: 100
               }}
             >
+              <Row
+                style={{
+                  alignItems: "center",
+                  marginTop: "50px"
+                }}
+              >
+                <Col md={12}>
+                  <Notification
+                    message="Patient allergens: lactose"
+                    status="critical"
+                    closer
+                  />
+                </Col>
+              </Row>
               {!!selectedIllness && (
                 <Row
                   style={{

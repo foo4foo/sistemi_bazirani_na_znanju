@@ -5,7 +5,7 @@ class UsersController < ApiController
   before_action :set_user_by_invitation_token, only: [:verify]
 
   def sign_in
-    if @user.password_valid?(user_params[:password])
+    if @user.password_valid?(params[:password])
       @token = JwtUtil.encode(@user)
       render 'sign_in', status: :ok
     else

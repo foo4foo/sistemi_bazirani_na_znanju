@@ -4,8 +4,9 @@
 admin = Role.create(name: 'admin')
 doctor = Role.create(name: 'doctor')
 
-user_doctor = User.new(email: 'riggy.ruter@gmail.com', first_name: 'Riggy', last_name: 'Ruter', password: '123')
+user_doctor = User.new(email: 'riggy.ruter@gmail.com', first_name: 'Riggy', last_name: 'Ruter', password: '123456')
 user_doctor.roles << doctor
+user_doctor.roles << admin
 user_doctor.save!
 
 # Illnesses group I
