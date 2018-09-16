@@ -3,11 +3,10 @@ class PatientFilesController < ApiController
     @patient_file = PatientFile.new(patient_file_params)
     @patient_file.patient.allergens = Allergen.where(id: params[:allergens])
 
-    if @patient_file.save
-      render
-    else
-      render json: { status: 'error', message: @patient_file.errors.full_messages.join(', ') }
-    end
+    render json: {
+      status: 'error',
+      message: @patient_file.errors.full_messages.join(', ')
+    } unless @patient_file.save
   end
 
   def show

@@ -1,4 +1,4 @@
-class MedicinesController < ApplicationController
+class MedicinesController < ApiController
   before_action :set_illness, only: [:index]
 
   def index

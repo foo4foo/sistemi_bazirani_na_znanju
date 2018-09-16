@@ -1,10 +1,15 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
+
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
 import { fetchMedicines } from "../../actions/medicines";
+import { createDiagnosis } from "../../actions/diagnoses";
+import { refreshAllergensStore } from "../../actions/allergens";
 
 import { Row, Col } from "react-flexbox-grid";
+
 import {
   Animate,
   Distribution,
@@ -12,17 +17,31 @@ import {
   Button,
   Select,
   Title,
+  Toast,
   Layer,
   Notification
 } from "grommet";
 
-import { isEqual } from "lodash";
+import { isEqual, isEmpty } from "lodash";
 
 class PossibleIllnesses extends React.Component {
   state = {
     selectedIllness: undefined,
+    showForm: false,
     selectedMedicines: []
   };
+
+  componentWillReceiveProps(newProps) {
+    const { diagnosis } = newProps;
+
+    if (!!diagnosis.id) {
+      this.setState({ showForm: false });
+
+      setTimeout(() => {
+        window.location.replace("/new_case");
+      }, 1000);
+    }
+  }
 
   onSelectMedicine = medicine => {
     const medicineIndex = this.state.selectedMedicines.findIndex(m =>
@@ -31,7 +50,6 @@ class PossibleIllnesses extends React.Component {
     if (medicineIndex === -1) {
       const selectedMedicines = [...this.state.selectedMedicines, medicine];
       this.setState({ selectedMedicines });
-      // send check this.props.matchIllnesses(selectedMedicines.map(m => s.value));
     } else {
       this.setState({
         selectedMedicines: this.state.selectedMedicines.filter(
@@ -41,12 +59,28 @@ class PossibleIllnesses extends React.Component {
     }
   };
 
+  submitDiagnosis = () => {
+    const { selectedMedicines, selectedIllness } = this.state;
+    const { patientFile, symptoms } = this.props;
+
+    this.props.createDiagnosis({
+      medicines: selectedMedicines.map(m => m.value),
+      symptoms: symptoms.map(s => s.id),
+      illnesses: Array(1).fill(selectedIllness.id),
+      patientId: patientFile.patient.id,
+      patientFileId: patientFile.id
+    });
+  };
+
   render() {
-    const { selectedIllness, selectedMedicines } = this.state;
-    const { illnesses, medicines } = this.props;
+    const { selectedIllness, selectedMedicines, showForm } = this.state;
+    const { diagnosis, illnesses, medicines, allergenMedicines } = this.props;
 
     return (
       <div>
+        {!!diagnosis.id && (
+          <Toast status="ok">Diagnosis successfuly created</Toast>
+        )}
         <Label>Illnesses most likely associated with symptoms</Label>
         <br />
         <Distribution
@@ -55,7 +89,12 @@ class PossibleIllnesses extends React.Component {
               label: i.name,
               value: parseInt(i.match, 10),
               onClick: () => {
-                this.setState({ selectedIllness: i, selectedMedicines: [] });
+                this.props.refreshAllergensStore();
+                this.setState({
+                  selectedIllness: i,
+                  selectedMedicines: [],
+                  showForm: true
+                });
                 this.props.fetchMedicines(i.id);
               }
             };
@@ -64,14 +103,16 @@ class PossibleIllnesses extends React.Component {
           size="small"
         />
         <br />{" "}
-        {!!selectedIllness && (
+        {showForm && (
           <Layer
             style={{
               marginTop: 50
             }}
             closer={true}
             overlayClose={true}
-            onClose={() => this.setState({ selectedIllness: undefined })}
+            onClose={() =>
+              this.setState({ selectedIllness: undefined, showForm: false })
+            }
           >
             <Animate
               style={{
@@ -91,11 +132,15 @@ class PossibleIllnesses extends React.Component {
                 }}
               >
                 <Col md={12}>
-                  <Notification
-                    message="Patient allergens: lactose"
-                    status="critical"
-                    closer
-                  />
+                  {!isEmpty(allergenMedicines) && (
+                    <Notification
+                      message={`Patient allergens: ${allergenMedicines
+                        .map(m => m.name)
+                        .join(", ")}`}
+                      status="critical"
+                      closer
+                    />
+                  )}
                 </Col>
               </Row>
               {!!selectedIllness && (
@@ -177,7 +222,7 @@ class PossibleIllnesses extends React.Component {
                   <Button
                     label="Make Diagnosis"
                     plain={false}
-                    onClick={() => console.log("submit")}
+                    onClick={this.submitDiagnosis}
                   />
                 </Col>
               </Row>
@@ -190,17 +235,25 @@ class PossibleIllnesses extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ medicines: state.medicines.data });
+const mapStateToProps = state => ({
+  medicines: state.medicines.data,
+  allergenMedicines: state.diagnoses.allergenMedicines,
+  diagnosis: state.diagnoses.data
+});
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      fetchMedicines
+      fetchMedicines,
+      createDiagnosis,
+      refreshAllergensStore
     },
     dispatch
   );
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(PossibleIllnesses);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(PossibleIllnesses)
+);

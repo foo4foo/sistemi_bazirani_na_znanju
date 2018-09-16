@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_16_111737) do
+ActiveRecord::Schema.define(version: 2018_09_16_172820) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string "namespace"
@@ -49,6 +49,11 @@ ActiveRecord::Schema.define(version: 2018_09_16_111737) do
   create_table "diagnoses_illnesses", id: false, force: :cascade do |t|
     t.integer "diagnosis_id", null: false
     t.integer "illness_id", null: false
+  end
+
+  create_table "diagnoses_medicines", id: false, force: :cascade do |t|
+    t.integer "diagnosis_id", null: false
+    t.integer "medicine_id", null: false
   end
 
   create_table "diagnoses_symptoms", id: false, force: :cascade do |t|

@@ -33,5 +33,7 @@ Rails.application.routes.draw do
     resources :allergens, only: [:index]
 
     resources :patient_files
+
+    resources :diagnoses, only: [:create]
   end
 end

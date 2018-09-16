@@ -15,10 +15,6 @@ class IllnessesController < ApiController
     @possible_illnesses_data = Illness.first(4)
   end
 
-  # def medicines
-  #   @medicines = @illness.medicines
-  # end
-
   private
 
   def set_illness
@@ -30,6 +26,6 @@ class IllnessesController < ApiController
   end
 
   def match_params
-    params.permit(:symptoms)
+    params.permit(symptoms: [])
   end
 end

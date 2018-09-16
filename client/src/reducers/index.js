@@ -4,10 +4,12 @@ import symptoms from "./symptoms";
 import allergens from "./allergens";
 import medicines from "./medicines";
 import patient_files from "./patient_files";
+import diagnoses from "./diagnoses";
 import { combineReducers } from "redux";
 
 const rootReducer = combineReducers({
   allergens,
+  diagnoses,
   users,
   illnesses,
   symptoms,

@@ -213,6 +213,8 @@ class NewCase extends React.Component {
         {!isEmpty(symptomsSelected) && (
           <PossibleIllnesses
             illnesses={illnesses}
+            symptoms={symptomsSelected}
+            patientFile={patientFile}
             showForm={this.showDiagnosisForm}
           />
         )}

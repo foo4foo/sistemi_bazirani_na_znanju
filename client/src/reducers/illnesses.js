@@ -6,7 +6,6 @@ import {
   MATCH_ILLNESSES_FAILURE,
   MATCH_ILLNESSES_SUCCESS
 } from "../actions/illnesses";
-import { FETCH_ALLERGENS } from "../actions/allergens";
 
 export default (state = {}, action) => {
   switch (action.type) {

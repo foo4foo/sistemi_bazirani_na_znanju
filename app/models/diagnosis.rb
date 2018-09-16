@@ -4,5 +4,5 @@ class Diagnosis < ApplicationRecord
 
   has_and_belongs_to_many :illnesses, inverse_of: nil
   has_and_belongs_to_many :symptoms
-  has_many :medicines
+  has_and_belongs_to_many :medicines
 end

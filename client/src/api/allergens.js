@@ -10,3 +10,17 @@ export const fetchAllergens = async data => {
     }
   });
 };
+
+export const matchMedicinesAgainsAllergens = async medicines => {
+  return await axios({
+    url: "http://localhost:3000/api/medicines/match_agains_allergens",
+    method: "POST",
+    data: {
+      medicines
+    },
+    headers: {
+      Accept: "application/json",
+      Authorization: localStorage.getItem("jwt")
+    }
+  });
+};
