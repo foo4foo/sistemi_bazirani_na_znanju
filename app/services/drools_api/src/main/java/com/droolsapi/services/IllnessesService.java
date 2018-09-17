@@ -33,16 +33,15 @@ public class IllnessesService {
 		symptomsMap = (Map<String, ArrayList<String>>) gson.fromJson(req, symptomsMap.getClass());
 
 		KieSession kieSession = kieContainer.newKieSession("illnessesSession");
-		
-		symptomsMap.get("symptoms").forEach(symptom -> { 
-			QueryResults illnessesResults = kieSession.getQueryResults(symptom);
-			
-			illnessesResults.forEach(row -> {
-				Illness illness = (Illness) row.get("illness"); 
-				System.out.println(illness.toString());
-			});
-		});
-		
+//		
+//		symptomsMap.get("symptoms").forEach(symptom -> {
+//			QueryResults illnessesResults = kieSession.getQueryResults(symptom);
+//			illnessesResults.forEach(row -> {
+//				Illness illness = (Illness) row.get("illness"); 
+//				System.out.println(illness.toString());
+//			});
+//		});
+//		
 		kieSession.dispose();
 		
 		return gson.toJson(req);
