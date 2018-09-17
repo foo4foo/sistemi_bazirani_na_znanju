@@ -1,0 +1,7 @@
+package rules
+
+import com.droolsapi.models.Illness
+
+query "Cold"
+    illness : new Illness( name == "Cough" || name == "Sneezing" )
+end
