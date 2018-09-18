@@ -118,26 +118,26 @@ rule "Frequent urination"
    when
     $diagnosisRaw : DiagnosisRaw(symptoms contains "Frequent urination")
    then
-   	$diagnosisRaw.addIllness("Diabetes", 15);
+   	$diagnosisRaw.addIllness("Diabetes", 25);
    end  
    
 rule "Nausea"
    when
     $diagnosisRaw : DiagnosisRaw(symptoms contains "Nausea")
    then
-   	$diagnosisRaw.addIllness("Diabetes", 15);
+   	$diagnosisRaw.addIllness("Diabetes", 25);
    end
    
 rule "Vomiting"
    when
     $diagnosisRaw : DiagnosisRaw(symptoms contains "Vomiting")
    then
-   	$diagnosisRaw.addIllness("Diabetes", 15);
+   	$diagnosisRaw.addIllness("Diabetes", 25);
    end
    
 rule "Weight loss"
    when
     $diagnosisRaw : DiagnosisRaw(symptoms contains "Weight loss")
    then
-   	$diagnosisRaw.addIllness("Diabetes", 15);
+   	$diagnosisRaw.addIllness("Diabetes", 25);
    end      
