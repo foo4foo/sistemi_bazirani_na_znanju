@@ -60,7 +60,7 @@ rule "Temperature > 38"
     $diagnosisRaw : DiagnosisRaw(symptoms contains "Temperature > 38")
    then
    	$diagnosisRaw.addIllness("Fever", 25);
-   	$diagnosisRaw.addIllness("Sinus Infection", 25);  
+   	$diagnosisRaw.addIllness("Sinus infection", 25);  
    end
    
 rule "Temperature > 40 && Temperature < 41"
@@ -82,7 +82,7 @@ rule "Yellow Nose Secret"
    when
     $diagnosisRaw : DiagnosisRaw(symptoms contains "Yellow Nose Secret")
    then
-   	$diagnosisRaw.addIllness("Sinus Infection", 20);
+   	$diagnosisRaw.addIllness("Sinus infection", 20);
    	$diagnosisRaw.addIllness("Tonsillitis", 20);
    end
 
@@ -104,7 +104,7 @@ rule "Eyes Swelling"
    when
     $diagnosisRaw : DiagnosisRaw(symptoms contains "Eyes Swelling")
    then
-   	$diagnosisRaw.addIllness("Sinus Infection", 50);
+   	$diagnosisRaw.addIllness("Sinus infection", 50);
    end
 
 rule "At least 10 times registered high blood pressure for the last 6 months"

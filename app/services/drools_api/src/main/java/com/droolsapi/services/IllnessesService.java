@@ -27,6 +27,7 @@ public class IllnessesService {
 
 	@SuppressWarnings("unchecked")
 	public String matchIllnesses(String req) {
+		System.out.println(req);
 		Map<String, ArrayList<String>> symptomsMap = new HashMap<>();
 		
 		symptomsMap = (Map<String, ArrayList<String>>) gson.fromJson(req, symptomsMap.getClass());
@@ -38,7 +39,7 @@ public class IllnessesService {
 		kieSession.insert(diagnosisRaw);
 		kieSession.fireAllRules();
 		kieSession.dispose();
-		
+
 		return gson.toJson(diagnosisRaw.illnesses);
 	}
 }

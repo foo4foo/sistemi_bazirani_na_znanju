@@ -160,7 +160,12 @@ class NewCase extends React.Component {
     const { patientFile, symptoms, createdMessage, illnesses } = this.props;
 
     return (
-      <div>
+      <div
+        style={{
+          height: "100vh",
+          overflowY: "auto"
+        }}
+      >
         {createdMessage === "Patient file created" && (
           <Toast status="ok">Patient file successfuly created</Toast>
         )}

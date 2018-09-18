@@ -18,7 +18,7 @@ gem 'bcrypt', '~> 3.1.7'
 gem 'devise'
 gem 'sidekiq'
 gem 'activeadmin'
-
+gem 'httparty'
 gem 'pundit'
 
 gem 'kaminari'

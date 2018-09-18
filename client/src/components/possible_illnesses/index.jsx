@@ -99,7 +99,7 @@ class PossibleIllnesses extends React.Component {
               }
             };
           })}
-          units="%"
+          units="VC"
           size="small"
         />
         <br />{" "}
