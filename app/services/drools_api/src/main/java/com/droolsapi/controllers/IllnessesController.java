@@ -18,4 +18,5 @@ public class IllnessesController {
 	public String index(@RequestBody String payload) {
 		return illnessesService.matchIllnesses(payload);
 	}
+
 }

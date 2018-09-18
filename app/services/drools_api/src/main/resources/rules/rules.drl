@@ -1,0 +1,143 @@
+package rules
+
+import com.droolsapi.models.DiagnosisRaw
+
+rule "Cough"
+   when
+   	$diagnosisRaw : DiagnosisRaw(symptoms contains "Cough")
+   then
+   	$diagnosisRaw.addIllness("Cold", 10);
+   	$diagnosisRaw.addIllness("Fever", 10);
+   	$diagnosisRaw.addIllness("Sinus infection", 10);
+   end
+
+rule "Sneezing"
+   when
+   	$diagnosisRaw : DiagnosisRaw(symptoms contains "Sneezing")
+   then
+   	$diagnosisRaw.addIllness("Cold", 10);
+   	$diagnosisRaw.addIllness("Fever", 10);
+   end
+
+rule "Leaky Nose"
+   when
+   	$diagnosisRaw : DiagnosisRaw(symptoms contains "Sneezing")
+   then
+   	$diagnosisRaw.addIllness("Cold", 10);
+   	$diagnosisRaw.addIllness("Fever", 10);
+   end
+
+rule "Headache"
+   when
+   	$diagnosisRaw : DiagnosisRaw(symptoms contains "Headache")
+   then
+   	$diagnosisRaw.addIllness("Cold", 10);
+   	$diagnosisRaw.addIllness("Fever", 10);
+   	$diagnosisRaw.addIllness("Tonsillitis", 10);
+   	$diagnosisRaw.addIllness("Sinus infection", 10);
+   end
+
+rule "Sore throat"
+   when
+   	$diagnosisRaw : DiagnosisRaw(symptoms contains "Sore Throat")
+   then
+   	$diagnosisRaw.addIllness("Cold", 10);
+   	$diagnosisRaw.addIllness("Fever", 10);
+   	$diagnosisRaw.addIllness("Tonsillitis", 10);
+   	$diagnosisRaw.addIllness("Sinus infection", 10);
+   end
+   
+rule "Trembling"
+   when
+   	$diagnosisRaw : DiagnosisRaw(symptoms contains "Trembling")
+   then
+   	$diagnosisRaw.addIllness("Fever", 10);
+   	$diagnosisRaw.addIllness("Tonsillitis", 10);
+   end
+   
+rule "Temperature > 38"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Temperature > 38")
+   then
+   	$diagnosisRaw.addIllness("Fever", 25);
+   	$diagnosisRaw.addIllness("Sinus Infection", 25);  
+   end
+   
+rule "Temperature > 40 && Temperature < 41"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Temperature > 40 && Temperature < 41")
+   then
+   	$diagnosisRaw.addIllness("Tonsillitis", 50);
+   end
+   
+rule "Tiredness"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Tiredness")
+   then
+   	$diagnosisRaw.addIllness("Tonsillitis", 25);
+   	$diagnosisRaw.addIllness("Diabetes", 25);
+   end
+
+rule "Yellow Nose Secret"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Yellow Nose Secret")
+   then
+   	$diagnosisRaw.addIllness("Sinus Infection", 20);
+   	$diagnosisRaw.addIllness("Tonsillitis", 20);
+   end
+
+rule "Pain Up To The Ears"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Pain Up To The Ears")
+   then
+   	$diagnosisRaw.addIllness("Tonsillitis", 50);
+   end
+
+rule "Loss of Appetite"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Loss of Appetite")
+   then
+   	$diagnosisRaw.addIllness("Tonsillitis", 50);
+   end
+
+rule "Eyes Swelling"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Eyes Swelling")
+   then
+   	$diagnosisRaw.addIllness("Sinus Infection", 50);
+   end
+
+rule "At least 10 times registered high blood pressure for the last 6 months"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "At least 10 times registered high blood pressure for the last 6 months")
+   then
+   	$diagnosisRaw.addIllness("Hypertension", 100);
+   end   
+   
+rule "Frequent urination"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Frequent urination")
+   then
+   	$diagnosisRaw.addIllness("Diabetes", 15);
+   end  
+   
+rule "Nausea"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Nausea")
+   then
+   	$diagnosisRaw.addIllness("Diabetes", 15);
+   end
+   
+rule "Vomiting"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Vomiting")
+   then
+   	$diagnosisRaw.addIllness("Diabetes", 15);
+   end
+   
+rule "Weight loss"
+   when
+    $diagnosisRaw : DiagnosisRaw(symptoms contains "Weight loss")
+   then
+   	$diagnosisRaw.addIllness("Diabetes", 15);
+   end      

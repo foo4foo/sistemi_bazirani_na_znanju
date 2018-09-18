@@ -6,21 +6,20 @@ import java.util.Map;
 
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
-import org.kie.api.runtime.rule.QueryResults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.droolsapi.models.Illness;
+import com.droolsapi.models.DiagnosisRaw;
 import com.google.gson.Gson;
 
 @Service
 public class IllnessesService {
-	
+
 	private final KieContainer kieContainer;
-	
+
 	@Autowired
 	private Gson gson;
-	
+
 	@Autowired
 	public IllnessesService(KieContainer kieContainer) {
 		this.kieContainer = kieContainer;
@@ -33,17 +32,13 @@ public class IllnessesService {
 		symptomsMap = (Map<String, ArrayList<String>>) gson.fromJson(req, symptomsMap.getClass());
 
 		KieSession kieSession = kieContainer.newKieSession("illnessesSession");
-//		
-//		symptomsMap.get("symptoms").forEach(symptom -> {
-//			QueryResults illnessesResults = kieSession.getQueryResults(symptom);
-//			illnessesResults.forEach(row -> {
-//				Illness illness = (Illness) row.get("illness"); 
-//				System.out.println(illness.toString());
-//			});
-//		});
-//		
+		
+		DiagnosisRaw diagnosisRaw = new DiagnosisRaw(symptomsMap.get("symptoms"));
+		
+		kieSession.insert(diagnosisRaw);
+		kieSession.fireAllRules();
 		kieSession.dispose();
 		
-		return gson.toJson(req);
+		return gson.toJson(diagnosisRaw.illnesses);
 	}
 }
