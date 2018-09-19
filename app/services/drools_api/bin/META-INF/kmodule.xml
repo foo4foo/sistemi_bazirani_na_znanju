@@ -3,4 +3,8 @@
    <kbase name="rules" packages="rules">
         <ksession name="illnessesSession"/>
     </kbase>
+    
+    <kbase name="allergen_rules" packages="allergen_rules">
+        <ksession name="allergensSession"/>
+    </kbase>
 </kmodule>

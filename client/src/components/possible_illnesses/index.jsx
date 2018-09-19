@@ -4,9 +4,10 @@ import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
-import { fetchMedicines } from "../../actions/medicines";
+import { fetchMedicines, matchAllergens } from "../../actions/medicines";
 import { createDiagnosis } from "../../actions/diagnoses";
 import { refreshAllergensStore } from "../../actions/allergens";
+import { PropagateLoader } from "react-spinners";
 
 import { Row, Col } from "react-flexbox-grid";
 
@@ -44,18 +45,40 @@ class PossibleIllnesses extends React.Component {
   }
 
   onSelectMedicine = medicine => {
-    const medicineIndex = this.state.selectedMedicines.findIndex(m =>
-      isEqual(m, medicine)
-    );
-    if (medicineIndex === -1) {
-      const selectedMedicines = [...this.state.selectedMedicines, medicine];
-      this.setState({ selectedMedicines });
-    } else {
-      this.setState({
-        selectedMedicines: this.state.selectedMedicines.filter(
-          m => m.value !== medicine.value
-        )
-      });
+    const { patientFile } = this.props;
+
+    if (!!patientFile.patient) {
+      const medicineIndex = this.state.selectedMedicines.findIndex(m =>
+        isEqual(m, medicine)
+      );
+      if (medicineIndex === -1) {
+        const selectedMedicines = [...this.state.selectedMedicines, medicine];
+        this.setState(
+          {
+            selectedMedicines
+          },
+          () => {
+            this.props.matchAllergens({
+              medicines: selectedMedicines.map(m => m.value),
+              patientId: patientFile.patient.id
+            });
+          }
+        );
+      } else {
+        this.setState(
+          {
+            selectedMedicines: this.state.selectedMedicines.filter(
+              m => m.value !== medicine.value
+            )
+          },
+          () => {
+            this.props.matchAllergens({
+              medicines: this.state.selectedMedicines.map(m => m.value),
+              patientId: patientFile.patient.id
+            });
+          }
+        );
+      }
     }
   };
 
@@ -74,7 +97,13 @@ class PossibleIllnesses extends React.Component {
 
   render() {
     const { selectedIllness, selectedMedicines, showForm } = this.state;
-    const { diagnosis, illnesses, medicines, allergenMedicines } = this.props;
+    const {
+      diagnosis,
+      illnesses,
+      medicines,
+      allergenMedicines,
+      pendingAllergenMedicines
+    } = this.props;
 
     return (
       <div>
@@ -99,7 +128,7 @@ class PossibleIllnesses extends React.Component {
               }
             };
           })}
-          units="VC"
+          units="score"
           size="small"
         />
         <br />{" "}
@@ -125,14 +154,14 @@ class PossibleIllnesses extends React.Component {
                 delay: 100
               }}
             >
-              <Row
-                style={{
-                  alignItems: "center",
-                  marginTop: "50px"
-                }}
-              >
-                <Col md={12}>
-                  {!isEmpty(allergenMedicines) && (
+              {!isEmpty(allergenMedicines) && (
+                <Row
+                  style={{
+                    alignItems: "center",
+                    marginTop: "50px"
+                  }}
+                >
+                  <Col md={12}>
                     <Notification
                       message={`Patient allergens: ${allergenMedicines
                         .map(m => m.name)
@@ -140,9 +169,9 @@ class PossibleIllnesses extends React.Component {
                       status="critical"
                       closer
                     />
-                  )}
-                </Col>
-              </Row>
+                  </Col>
+                </Row>
+              )}
               {!!selectedIllness && (
                 <Row
                   style={{
@@ -216,14 +245,37 @@ class PossibleIllnesses extends React.Component {
                 <Col
                   md={4}
                   style={{
-                    textAlign: "right"
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    alignItems: "center"
                   }}
                 >
-                  <Button
-                    label="Make Diagnosis"
-                    plain={false}
-                    onClick={this.submitDiagnosis}
-                  />
+                  <div
+                    style={{
+                      marginBottom: "20px"
+                    }}
+                  >
+                    {pendingAllergenMedicines ? (
+                      <PropagateLoader
+                        className={"clip"}
+                        sizeUnit={"px"}
+                        size={15}
+                        color={"#DA0077"}
+                        loading={true}
+                      />
+                    ) : (
+                      <Button
+                        label="Make Diagnosis"
+                        plain={false}
+                        onClick={
+                          isEmpty(allergenMedicines)
+                            ? this.submitDiagnosis
+                            : null
+                        }
+                      />
+                    )}
+                  </div>
                 </Col>
               </Row>
               <br />
@@ -237,7 +289,8 @@ class PossibleIllnesses extends React.Component {
 
 const mapStateToProps = state => ({
   medicines: state.medicines.data,
-  allergenMedicines: state.diagnoses.allergenMedicines,
+  allergenMedicines: state.allergens.data,
+  pendingAllergenMedicines: state.allergens.pending,
   diagnosis: state.diagnoses.data
 });
 
@@ -245,6 +298,7 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       fetchMedicines,
+      matchAllergens,
       createDiagnosis,
       refreshAllergensStore
     },

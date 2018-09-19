@@ -32,6 +32,12 @@ Rails.application.routes.draw do
 
     resources :allergens, only: [:index]
 
+    resources :medicines, only: [] do
+      collection do
+        post 'match_against_allergens'
+      end
+    end
+
     resources :patient_files
 
     resources :diagnoses, only: [:create]

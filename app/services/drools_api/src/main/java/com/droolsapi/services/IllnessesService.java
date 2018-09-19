@@ -26,11 +26,10 @@ public class IllnessesService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public String matchIllnesses(String req) {
-		System.out.println(req);
+	public String matchIllnesses(String payload) {
 		Map<String, ArrayList<String>> symptomsMap = new HashMap<>();
 		
-		symptomsMap = (Map<String, ArrayList<String>>) gson.fromJson(req, symptomsMap.getClass());
+		symptomsMap = (Map<String, ArrayList<String>>) gson.fromJson(payload, symptomsMap.getClass());
 
 		KieSession kieSession = kieContainer.newKieSession("illnessesSession");
 		

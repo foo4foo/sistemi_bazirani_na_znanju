@@ -11,6 +11,6 @@ class AllergensController < ApiController
   private
 
   def match_agains_medicines_params
-    params.permit(:medicines)
+    params.permit(medicines: [])
   end
 end

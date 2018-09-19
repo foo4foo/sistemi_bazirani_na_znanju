@@ -11,12 +11,13 @@ export const fetchAllergens = async data => {
   });
 };
 
-export const matchMedicinesAgainsAllergens = async medicines => {
+export const matchMedicinesAgainsAllergens = async data => {
   return await axios({
-    url: "http://localhost:3000/api/medicines/match_agains_allergens",
+    url: "http://localhost:3000/api/medicines/match_against_allergens",
     method: "POST",
     data: {
-      medicines
+      medicines: data.medicines,
+      patient_id: data.patientId
     },
     headers: {
       Accept: "application/json",

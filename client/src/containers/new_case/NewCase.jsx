@@ -44,16 +44,20 @@ class NewCase extends React.Component {
   }
 
   onSelectSymptom = selected => {
-    if (
-      !this.state.symptomsSelected.find(s => isEqual(s, selected.suggestion))
-    ) {
-      const symptomsSelected = [
-        ...this.state.symptomsSelected,
-        selected.suggestion
-      ];
-      this.setState({ symptomsSelected });
-      // send check
-      this.props.matchIllnesses(symptomsSelected.map(s => s.id));
+    const { patientFile } = this.props;
+
+    if (!!patientFile.patient) {
+      if (
+        !this.state.symptomsSelected.find(s => isEqual(s, selected.suggestion))
+      ) {
+        const symptomsSelected = [
+          ...this.state.symptomsSelected,
+          selected.suggestion
+        ];
+        this.setState({ symptomsSelected });
+        // send check
+        this.props.matchIllnesses(symptomsSelected.map(s => s.id));
+      }
     }
   };
 
