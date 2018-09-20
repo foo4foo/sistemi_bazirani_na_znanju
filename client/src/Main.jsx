@@ -7,8 +7,6 @@ import {
   Redirect
 } from "react-router-dom";
 
-import moment from "moment";
-
 import { withCookies, Cookies } from "react-cookie";
 
 import { Timeline } from "react-twitter-widgets";
@@ -19,22 +17,12 @@ import Login from "./components/session/login";
 import Patients from "./containers/patients";
 import Home from "./containers/home/home";
 import NewCase from "./containers/new_case/NewCase";
+import IntesiveCare from "./containers/intesive_care";
 
 class Main extends React.Component {
   static propTypes = {
     cookies: instanceOf(Cookies).isRequired
   };
-
-  constructor(props) {
-    super(props);
-    // const { cookies } = props; cookies.set("jwt", localStorage.getItem("jwt"), {
-    // path: "/",   expires: new Date(moment().add(3, "minutes")),   maxAge:
-    // 31536000 });
-  }
-
-  componentDidMount() {
-    // const { cookies } = this.props; console.log(cookies);
-  }
 
   render() {
     return (
@@ -62,6 +50,11 @@ class Main extends React.Component {
                       <Route exact path="/" component={Home} />
                       <Route exact path="/patients" component={Patients} />
                       <Route exact path="/new_case" component={NewCase} />
+                      <Route
+                        exact
+                        path="/intesive_care"
+                        component={IntesiveCare}
+                      />
                     </Col>
                   </Row>
                 </Row>
