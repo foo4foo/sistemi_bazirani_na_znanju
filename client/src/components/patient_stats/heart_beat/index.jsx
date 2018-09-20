@@ -36,7 +36,7 @@ export class HeartBeat extends React.Component {
     }
     if (timePassed <= 60) {
       this.setState({
-        beatCount: this.state.beatCount + Math.floor(Math.random() * 3) + 1,
+        beatCount: this.state.beatCount + Math.floor(Math.random() * 2) + 1,
         timePassed
       });
     } else {
