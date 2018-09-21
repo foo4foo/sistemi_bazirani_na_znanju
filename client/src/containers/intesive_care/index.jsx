@@ -14,7 +14,8 @@ import { HeartBeat } from "../../components/patient_stats/heart_beat";
 class IntesiveCare extends React.Component {
   state = {
     pattern: "",
-    beatCount: 0
+    beatCount: 0,
+    oxygenLevel: 80
   };
 
   updateBeatCount = newCount => {
@@ -23,8 +24,14 @@ class IntesiveCare extends React.Component {
     });
   };
 
+  setOxygenLevel = newLevel => {
+    this.setState({
+      oxygenLevel: this.state.oxygenLevel + newLevel
+    });
+  };
+
   render() {
-    const { pattern, beatCount } = this.state;
+    const { pattern, beatCount, oxygenLevel } = this.state;
 
     return (
       <div>
@@ -51,9 +58,16 @@ class IntesiveCare extends React.Component {
             delay: 100
           }}
         >
-          <Row>
+          <Row
+            style={{
+              marginTop: "5%"
+            }}
+          >
             <Col lg={6} md={6} sm={12}>
-              <OxygenLevel />
+              <OxygenLevel
+                oxygenLevel={oxygenLevel}
+                setOxygenLevel={this.setOxygenLevel}
+              />
             </Col>
             <Col
               lg={6}
@@ -62,8 +76,7 @@ class IntesiveCare extends React.Component {
               style={{
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "center",
-                marginTop: "3%"
+                justifyContent: "center"
               }}
             >
               <HeartBeat
