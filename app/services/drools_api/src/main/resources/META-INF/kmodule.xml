@@ -7,4 +7,8 @@
     <kbase name="allergen_rules" packages="allergen_rules">
         <ksession name="allergensSession"/>
     </kbase>
+    
+    <kbase name="intesive_care_rules" packages="intesive_care_rules">
+        <ksession name="intesiveCareSession"/>
+    </kbase>
 </kmodule>

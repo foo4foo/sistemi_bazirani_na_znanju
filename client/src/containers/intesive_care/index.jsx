@@ -13,11 +13,18 @@ import { HeartBeat } from "../../components/patient_stats/heart_beat";
 
 class IntesiveCare extends React.Component {
   state = {
-    pattern: ""
+    pattern: "",
+    beatCount: 0
+  };
+
+  updateBeatCount = newCount => {
+    this.setState({
+      beatCount: newCount !== 0 ? this.state.beatCount + newCount : newCount
+    });
   };
 
   render() {
-    const { pattern } = this.state;
+    const { pattern, beatCount } = this.state;
 
     return (
       <div>
@@ -59,7 +66,10 @@ class IntesiveCare extends React.Component {
                 marginTop: "3%"
               }}
             >
-              <HeartBeat />
+              <HeartBeat
+                beatCount={beatCount}
+                updateBeatCount={this.updateBeatCount}
+              />
             </Col>
           </Row>
         </Animate>

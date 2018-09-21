@@ -2,17 +2,18 @@ import React from "react";
 
 import heart from "../../../assets/images/heart.png";
 import { Label } from "grommet";
-import { Pulse } from "react-motions";
+import { Pulse, Tada } from "react-motions";
 
-const heartBeats = [1, 100];
+import "./heart_beat.css";
 
 export class HeartBeat extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      beatCount: 0,
-      timePassed: 0
+      heartRate: 2,
+      timePassed: 0,
+      heartSpeed: 1
     };
   }
 
@@ -27,20 +28,31 @@ export class HeartBeat extends React.Component {
   };
 
   updateBeat = () => {
-    let { timePassed } = this.state;
+    let { timePassed, heartRate } = this.state;
 
     timePassed += 1;
 
     if (Number.isInteger(timePassed / 10)) {
-      console.log("salji");
+      const { beatCount } = this.props;
+      // this.props.updatePatientState(currentState);
     }
     if (timePassed <= 60) {
-      this.setState({
-        beatCount: this.state.beatCount + Math.floor(Math.random() * 2) + 1,
-        timePassed
-      });
+      const heartSpeed = Math.floor(Math.random() * heartRate) + 1;
+      this.props.updateBeatCount(heartSpeed);
+      this.setState({ timePassed, heartSpeed });
     } else {
-      this.setState({ beatCount: 0, timePassed: 0 });
+      this.props.updateBeatCount(0);
+      this.setState({ timePassed: 0, heartSpeed: 1 });
+    }
+  };
+
+  toggleHeartRate = () => {
+    const { heartRate } = this.state;
+
+    if (heartRate === 2) {
+      this.setState({ heartRate: 4 });
+    } else {
+      this.setState({ heartRate: 2 });
     }
   };
 
@@ -49,7 +61,8 @@ export class HeartBeat extends React.Component {
   }
 
   render() {
-    const { beatCount, timePassed } = this.state;
+    const { timePassed, heartRate } = this.state;
+    const { beatCount } = this.props;
 
     return (
       <div>
@@ -62,9 +75,29 @@ export class HeartBeat extends React.Component {
           <Label>Heart beats ({`${timePassed} seconds passed`})</Label>
         </div>
         <Pulse duration={1} infinite>
-          <div>
-            <img src={heart} width="350" height="250" alt="heart" />
-          </div>
+          {heartRate > 2 ? (
+            <Tada duration={1} infinite>
+              <div
+                className="heart"
+                onClick={this.toggleHeartRate}
+                style={{
+                  cursor: "pointer"
+                }}
+              >
+                <img src={heart} width="350" height="250" alt="heart" />
+              </div>
+            </Tada>
+          ) : (
+            <div
+              className="heart"
+              onClick={this.toggleHeartRate}
+              style={{
+                cursor: "pointer"
+              }}
+            >
+              <img src={heart} width="350" height="250" alt="heart" />
+            </div>
+          )}
         </Pulse>
         <div
           style={{
