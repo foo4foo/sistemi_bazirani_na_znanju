@@ -1,0 +1,30 @@
+package intesive_care_rules
+
+import com.droolsapi.models.PatientStats
+import com.droolsapi.models.IntesiveCareStats
+
+global com.droolsapi.models.MonitoringResult monitoringResult;
+
+rule "Rapid heart beat"
+	when
+		$patientStats : PatientStats( $stats : stats, $stats.heartBeats > 25 )
+	then
+	    monitoringResult.rapidHeartBeat = true;
+	    update(monitoringResult);
+	end
+	
+rule "Oxygen level too low"
+	when
+		$patientStats : PatientStats( $stats : stats, $stats.oxygenLevel < 70 )
+	then
+	    monitoringResult.oxygenProblems = true;
+	    update(monitoringResult);
+	end
+
+rule "Dialysis needed"
+	when
+		$patientStats : PatientStats( $stats : stats, $stats.heartBeats > 10, $stats.urinAmount < 100, $stats.illnesses contains "Chronic kidney disease" )
+	then
+	    monitoringResult.dialysisNeeded = true;
+	    update(monitoringResult);
+	end
