@@ -32,9 +32,9 @@ class Login extends Component {
         <Box justify="center" align="center" pad="medium">
           <LoginForm
             onSubmit={this.submitForm}
-            secondaryText="Sample secondary text"
+            secondaryText=""
             usernameType="email"
-            title="Sample Title"
+            title="Vivacious Giddy"
           />
         </Box>
       </Split>

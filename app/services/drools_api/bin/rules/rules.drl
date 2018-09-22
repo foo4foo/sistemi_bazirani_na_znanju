@@ -76,6 +76,8 @@ rule "Tiredness"
    then
    	$diagnosisRaw.addIllness("Tonsillitis", 25);
    	$diagnosisRaw.addIllness("Diabetes", 25);
+   	$diagnosisRaw.addIllness("Chronic Kidney Disease", 10);
+   	$diagnosisRaw.addIllness("Acute Kidney Injury", 10);
    end
 
 rule "Yellow Nose Secret"
@@ -141,3 +143,50 @@ rule "Weight loss"
    then
    	$diagnosisRaw.addIllness("Diabetes", 25);
    end      
+   
+rule "Nocturia"
+	when
+	  $diagnosisRaw : DiagnosisRaw(symptoms contains "Nocturia")
+	then
+	  $diagnosisRaw.addIllness("Chronic Kidney Disease", 30);
+	end
+   
+rule "Swallen Joints"
+	when
+	  $diagnosisRaw : DiagnosisRaw(symptoms contains "Swallen Joints")
+	then
+	  $diagnosisRaw.addIllness("Acute Kidney Injury", 15);
+	  $diagnosisRaw.addIllness("Chronic Kidney Disease", 15);
+	end
+      
+rule "Respiratory Issues"
+	when
+	  $diagnosisRaw : DiagnosisRaw(symptoms contains "Respiratory Issues")
+	then
+	  $diagnosisRaw.addIllness("Acute Kidney Injury", 15);
+	  $diagnosisRaw.addIllness("Chronic Kidney Disease", 15);
+	end
+      
+rule "Chest Pain"
+	when
+	  $diagnosisRaw : DiagnosisRaw(symptoms contains "Chest Pain")
+	then
+	  $diagnosisRaw.addIllness("Chronic Kidney Disease", 25);
+	end
+
+rule "Post Operational Recovery"
+	when
+	  $diagnosisRaw : DiagnosisRaw(symptoms contains "Post Operational Recovery")
+	then
+	  $diagnosisRaw.addIllness("Acute Kidney Injury", 25);
+	end
+	
+rule "Diarrhea"
+	when
+	  $diagnosisRaw : DiagnosisRaw(symptoms contains "Diarrhea")
+	then
+	  $diagnosisRaw.addIllness("Acute Kidney Injury", 25);
+	end
+	
+	
+	

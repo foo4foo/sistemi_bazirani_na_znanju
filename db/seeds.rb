@@ -139,6 +139,7 @@ ethacrynate = Medicine.new(name: 'Ethacrynate')
 sulfonylureas = Medicine.new(name: 'Sulfonylureas')
 metformin = Medicine.new(name: 'Metformin')
 meglitinides = Medicine.new(name: 'Meglitinides')
+brufen = Medicine.new(name: 'Brufen')
 
 # add ingredients
 
@@ -244,6 +245,10 @@ meglitinides.ingredients << microcrystalline_cellulose
 
 meglitinides.save!
 
+brufen.ingredients << ibuprofen
+
+brufen.save!
+
 # connect medicines with illnesses
 
 cold.medicines << advil
@@ -277,3 +282,11 @@ diabetes.medicines << sulfonylureas
 diabetes.medicines << metformin
 
 diabetes.save!
+
+chronic_kidney_disease.medicines << brufen
+
+chronic_kidney_disease.save!
+
+acute_kidney_injury.medicines << brufen
+
+acute_kidney_injury.save!
