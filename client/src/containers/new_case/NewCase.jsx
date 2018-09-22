@@ -4,7 +4,6 @@ import NodesIcon from "grommet/components/icons/base/Nodes";
 import CloseIcon from "grommet/components/icons/base/Close";
 
 import { isEmpty, isEqual } from "lodash";
-import moment from "moment";
 
 import {
   Header,
@@ -12,7 +11,6 @@ import {
   Search,
   Button,
   TextInput,
-  Label,
   Toast,
   List,
   ListItem
@@ -20,6 +18,7 @@ import {
 
 import PatientFileModal from "../../components/patient_file_modal/PatientFileModal";
 import PossibleIllnesses from "../../components/possible_illnesses";
+import { PatientInfo } from "../../components/PatientInfo";
 import { Row, Col } from "react-flexbox-grid";
 
 import { withRouter } from "react-router-dom";
@@ -29,6 +28,7 @@ import { connect } from "react-redux";
 import { matchIllnesses } from "../../actions/illnesses";
 import { searchPatientFiles } from "../../actions/patient_files";
 import { searchSymptoms } from "../../actions/symptoms";
+import { renderPatientInfo } from "../../components/PatientInfo";
 
 import "./NewCase.css";
 
@@ -114,43 +114,6 @@ class NewCase extends React.Component {
     });
   };
 
-  renderPatientInfo = patient => {
-    return (
-      <Row>
-        <Col
-          md={4}
-          style={{
-            textAlign: "left"
-          }}
-        >
-          <Label>
-            <i>Name</i>: {patient.name}
-          </Label>
-        </Col>
-        <Col
-          md={4}
-          style={{
-            textAlign: "left"
-          }}
-        >
-          <Label>
-            <i>Surname</i>: {patient.surname}
-          </Label>
-        </Col>
-        <Col
-          md={4}
-          style={{
-            textAlign: "left"
-          }}
-        >
-          <Label>
-            <i>Birth Date</i>: {moment(patient.birthDate).format("DD-MM-YYYY")}
-          </Label>
-        </Col>
-      </Row>
-    );
-  };
-
   renderSymptomSuggestions = symptoms => {
     if (symptoms) {
       return symptoms.map(symptom => {
@@ -192,7 +155,7 @@ class NewCase extends React.Component {
             {!patientFile.patient && (
               <Button label="New File" onClick={this.toggleModal} />
             )}
-            {patientFile.patient && this.renderPatientInfo(patientFile.patient)}
+            {patientFile.patient && PatientInfo(patientFile.patient)}
           </Col>
           <Col md={2}>
             {newFileModalOpened &&

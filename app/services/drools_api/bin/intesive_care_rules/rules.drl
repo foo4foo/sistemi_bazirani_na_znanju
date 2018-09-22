@@ -9,7 +9,7 @@ rule "Rapid heart beat"
 	when
 		$patientStats : PatientStats( $stats : stats, $stats.heartBeats > 25 )
 	then
-	    monitoringResult.rapidHeartBeat = true;
+	    monitoringResult.rapidHeartRate = true;
 	    update(monitoringResult);
 	end
 	

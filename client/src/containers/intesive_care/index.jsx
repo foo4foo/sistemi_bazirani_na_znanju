@@ -4,18 +4,55 @@ import { withRouter } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 
+import { searchPatients, checkStatus } from "../../actions/patients";
+
 import AccessibleIcon from "grommet/components/icons/base/Accessible";
 
-import { Header, Box, Search, Animate } from "grommet";
+import { Header, Box, Search, Animate, Notification } from "grommet";
 import { Row, Col } from "react-flexbox-grid";
 import { OxygenLevel } from "../../components/patient_stats/oxygen_level";
 import { HeartBeat } from "../../components/patient_stats/heart_beat";
+import UrinLevel from "../../components/patient_stats/urin_level";
+import { PatientInfo } from "../../components/PatientInfo";
+
+const notificationMessage = (
+  rapidHeartRate,
+  oxygenProblems,
+  dialysisNeeded
+) => {
+  let messageArray = [];
+  if (rapidHeartRate) messageArray.push("Rapid Heart Rate");
+  if (oxygenProblems) messageArray.push("Oxygen Problems");
+  if (dialysisNeeded) messageArray.push("Dialysis Needed");
+
+  return messageArray.join(", ");
+};
 
 class IntesiveCare extends React.Component {
   state = {
     pattern: "",
     beatCount: 0,
-    oxygenLevel: 80
+    resetHeartTime: false,
+    oxygenLevel: 80,
+    urinAmount: 670,
+    patient: undefined
+  };
+
+  toggleResetHeartTime = () => {
+    this.setState({
+      resetHeartTime: !this.state.resetHeartTime
+    });
+  };
+
+  handleTextInput = event => {
+    this.setState(
+      {
+        pattern: event.target.value
+      },
+      () => {
+        this.props.searchPatients(this.state.pattern);
+      }
+    );
   };
 
   updateBeatCount = newCount => {
@@ -30,8 +67,67 @@ class IntesiveCare extends React.Component {
     });
   };
 
+  setUrinAmount = newAmount => {
+    this.setState({
+      urinAmount: this.state.urinAmount + newAmount
+    });
+  };
+
+  renderPatientSuggestions = patients => {
+    return patients.map(patient => {
+      return {
+        label: `${patient.name}
+    ${patient.surname}`,
+        id: patient.id
+      };
+    });
+  };
+
+  onSelectPatient = patient => {
+    const { patients } = this.props;
+
+    this.setState({
+      patient: patients.find(p => p.id === patient.id),
+      oxygenLevel: 80,
+      beatCount: 0,
+      resetHeartTime: true
+    });
+  };
+
+  checkPatientStatus = () => {
+    const { patient, beatCount, oxygenLevel } = this.state;
+
+    if (patient) {
+      this.props.checkStatus({
+        patient: {
+          id: patient.id,
+          firstName: patient.name,
+          lastName: patient.surname
+        },
+        stats: {
+          heartBeats: beatCount,
+          oxygenLevel,
+          illnesses: patient.illnesses
+        }
+      });
+    }
+  };
+
   render() {
-    const { pattern, beatCount, oxygenLevel } = this.state;
+    const {
+      pattern,
+      beatCount,
+      oxygenLevel,
+      patient,
+      resetHeartTime,
+      urinAmount
+    } = this.state;
+    const {
+      patients,
+      dialysisNeeded,
+      oxygenProblems,
+      rapidHeartRate
+    } = this.props;
 
     return (
       <div>
@@ -45,19 +141,40 @@ class IntesiveCare extends React.Component {
               fill={true}
               size="medium"
               placeHolder="Search patients"
-              dropAlign={{
-                right: "right"
-              }}
+              onSelect={patient => this.onSelectPatient(patient.suggestion)}
+              suggestions={this.renderPatientSuggestions(patients)}
             />
           </Box>
         </Header>
+        <br />{" "}
         <Animate
+          keep={false}
+          visible={dialysisNeeded || rapidHeartRate || oxygenProblems}
           enter={{
             animation: "slide-up",
             duration: 500,
             delay: 100
           }}
         >
+          <Notification
+            message={notificationMessage(
+              rapidHeartRate,
+              oxygenProblems,
+              dialysisNeeded
+            )}
+            status="critical"
+          />
+        </Animate>
+        <br />
+        <Animate
+          visible={!!patient}
+          enter={{
+            animation: "slide-up",
+            duration: 500,
+            delay: 100
+          }}
+        >
+          {patient && PatientInfo(patient)}
           <Row
             style={{
               marginTop: "5%"
@@ -67,6 +184,8 @@ class IntesiveCare extends React.Component {
               <OxygenLevel
                 oxygenLevel={oxygenLevel}
                 setOxygenLevel={this.setOxygenLevel}
+                oxygenProblems={oxygenProblems}
+                checkPatientStatus={this.checkPatientStatus}
               />
             </Col>
             <Col
@@ -82,6 +201,19 @@ class IntesiveCare extends React.Component {
               <HeartBeat
                 beatCount={beatCount}
                 updateBeatCount={this.updateBeatCount}
+                resetTime={resetHeartTime}
+                toggleResetHeartTime={this.toggleResetHeartTime}
+                checkPatientStatus={this.checkPatientStatus}
+                rapidHeartRate={rapidHeartRate}
+              />
+            </Col>
+          </Row>
+          <hr />
+          <Row>
+            <Col lg={12} md={12} sm={12}>
+              <UrinLevel
+                level={urinAmount}
+                setUrinAmount={this.setUrinAmount}
               />
             </Col>
           </Row>
@@ -91,9 +223,23 @@ class IntesiveCare extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  patients: state.patients.data,
+  loading: state.patients.loading,
+  error: state.patients.error,
+  oxygenProblems: state.patients.oxygenProblems,
+  rapidHeartRate: state.patients.rapidHeartRate,
+  dialysisNeeded: state.patients.dialysisNeeded
+});
 
-const mapDispatchToProps = dispatch => bindActionCreators({}, dispatch);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(
+    {
+      searchPatients,
+      checkStatus
+    },
+    dispatch
+  );
 
 export default withRouter(
   connect(

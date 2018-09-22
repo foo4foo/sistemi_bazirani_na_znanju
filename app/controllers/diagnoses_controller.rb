@@ -4,10 +4,9 @@ class DiagnosesController < ApiController
 
   def create
     medicines = Medicine.where(id: medicines_params[:medicines])
-    # @allergen_medicines = DroolsService.match_allergens(current_user.allergens, medicines)
-    # render :allergen_medicines unless @allergen_medicines.blank?
     @diagnosis = Diagnosis.new(diagnosis_params)
     @diagnosis.medicines << medicines
+    @diagnosis.patient.illnesses << @illnesses
     @diagnosis.illnesses << @illnesses
     @diagnosis.symptoms << @symptoms
 

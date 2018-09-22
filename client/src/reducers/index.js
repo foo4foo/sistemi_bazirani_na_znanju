@@ -1,10 +1,12 @@
-import users from "./users";
-import illnesses from "./illnesses";
-import symptoms from "./symptoms";
 import allergens from "./allergens";
-import medicines from "./medicines";
-import patient_files from "./patient_files";
 import diagnoses from "./diagnoses";
+import illnesses from "./illnesses";
+import users from "./users";
+import symptoms from "./symptoms";
+import medicines from "./medicines";
+import patients from "./patients";
+import patient_files from "./patient_files";
+
 import { combineReducers } from "redux";
 
 const rootReducer = combineReducers({
@@ -14,6 +16,7 @@ const rootReducer = combineReducers({
   illnesses,
   symptoms,
   medicines,
+  patients,
   patient_files
 });
 

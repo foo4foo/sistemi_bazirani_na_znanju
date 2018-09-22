@@ -5,4 +5,8 @@ class Patient < ApplicationRecord
 
   validates :first_name, presence: true
   validates :email, uniqueness: true, presence: true
+
+  scope :search_by_pattern, -> (pattern) {
+    where('lower(first_name) LIKE ? OR lower(last_name) LIKE ?', "%#{pattern.downcase}%", "%#{pattern.downcase}%")
+  }
 end

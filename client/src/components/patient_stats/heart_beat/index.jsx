@@ -1,7 +1,7 @@
 import React from "react";
 
 import heart from "../../../assets/images/heart.png";
-import { Label } from "grommet";
+import { Label, Heading } from "grommet";
 import { Pulse, Tada } from "react-motions";
 
 import "./heart_beat.css";
@@ -15,6 +15,21 @@ export class HeartBeat extends React.Component {
       timePassed: 0,
       heartSpeed: 1
     };
+  }
+
+  componentWillReceiveProps(newProps) {
+    const { resetTime } = newProps;
+
+    if (resetTime) {
+      this.setState(
+        {
+          heartRate: 2,
+          timePassed: 0,
+          heartSpeed: 1
+        },
+        () => this.props.toggleResetHeartTime()
+      );
+    }
   }
 
   componentDidMount() {
@@ -33,8 +48,7 @@ export class HeartBeat extends React.Component {
     timePassed += 1;
 
     if (Number.isInteger(timePassed / 10)) {
-      const { beatCount } = this.props;
-      // this.props.updatePatientState(currentState);
+      this.props.checkPatientStatus();
     }
     if (timePassed <= 60) {
       const heartSpeed = Math.floor(Math.random() * heartRate) + 1;
@@ -62,7 +76,7 @@ export class HeartBeat extends React.Component {
 
   render() {
     const { timePassed, heartRate } = this.state;
-    const { beatCount } = this.props;
+    const { beatCount, rapidHeartRate } = this.props;
 
     return (
       <div>
@@ -72,7 +86,9 @@ export class HeartBeat extends React.Component {
             textAlign: "center"
           }}
         >
-          <Label>Heart beats ({`${timePassed} seconds passed`})</Label>
+          <Heading>
+            <strong>Heart Rate</strong>
+          </Heading>
         </div>
         <Pulse duration={1} infinite>
           {heartRate > 2 ? (
@@ -107,7 +123,11 @@ export class HeartBeat extends React.Component {
         >
           <Label>
             <h2>
-              <b>{` ${beatCount}♥`}</b>
+              <b
+                style={{
+                  color: rapidHeartRate ? "red" : "black"
+                }}
+              >{` ${beatCount}♥`}</b>
             </h2>
           </Label>
         </div>

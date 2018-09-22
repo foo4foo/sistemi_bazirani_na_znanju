@@ -13,7 +13,7 @@ public class IntesiveCareController {
 	
 	@Autowired
 	private IntesiveCareService intesiveCareService;
-
+	
 	@RequestMapping(value = "/check_patient_stats", method = RequestMethod.POST)
 	public String index(@RequestBody String payload) {
 		return intesiveCareService.checkPatientStats(payload);

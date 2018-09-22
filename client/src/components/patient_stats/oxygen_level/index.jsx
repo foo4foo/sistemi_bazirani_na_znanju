@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Meter, Value, Label } from "grommet";
+import { Box, Meter, Value, Heading } from "grommet";
 
 export class OxygenLevel extends React.Component {
   state = {
@@ -39,7 +39,7 @@ export class OxygenLevel extends React.Component {
   }
 
   render() {
-    const { oxygenLevel } = this.props;
+    const { oxygenLevel, oxygenProblems } = this.props;
 
     return (
       <div>
@@ -48,10 +48,13 @@ export class OxygenLevel extends React.Component {
             textAlign: "center"
           }}
         >
-          <Label>Oxygen Level</Label>
+          <Heading>
+            <strong>Oxygen Level</strong>
+          </Heading>
         </div>
         <Box responsive={false} align="center">
           <Meter
+            colorIndex={oxygenProblems ? "grey-1 " : "neutral-1"}
             type="arc"
             size="medium"
             vertical={false}

@@ -13,7 +13,11 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :patients, only: [:create, :search]
+    resources :patients, only: [:create] do
+      collection do
+        get 'search'
+      end
+    end
 
     resources :illnesses do
       collection do
