@@ -27,9 +27,9 @@ export default class UrinLevel extends React.Component {
       this.props.setUrinAmount(-Math.floor(Math.random() * 100) + 1);
     }
 
-    if (level >= 1200) {
+    if (level >= 600) {
       this.setState({ urinUp: false });
-    } else if (level < 70) {
+    } else if (level < 60) {
       this.setState({ urinUp: true });
     }
   };
@@ -58,10 +58,10 @@ export default class UrinLevel extends React.Component {
             responsive={false}
           >
             <Label size="small">0 ml</Label>
-            <Label size="small">2000 ml</Label>
+            <Label size="small">1000 ml</Label>
           </Box>
         </Box>
-        <Meter size="large" vertical={false} value={level} max={2000} min={0} />
+        <Meter size="large" vertical={false} value={level} max={1000} min={0} colorIndex="warning" />
         <div
           style={{
             display: "flex",

@@ -23,7 +23,7 @@ rule "Oxygen level too low"
 
 rule "Dialysis needed"
 	when
-		$patientStats : PatientStats( $stats : stats, $stats.heartBeats > 10, $stats.urinAmount < 100, $stats.illnesses contains "Chronic kidney disease" )
+		$patientStats : PatientStats( $stats : stats, $stats.heartBeats > 10, $stats.urinAmount < 100, $stats.illnesses contains "Chronic Kidney Disease" )
 	then
 	    monitoringResult.dialysisNeeded = true;
 	    update(monitoringResult);

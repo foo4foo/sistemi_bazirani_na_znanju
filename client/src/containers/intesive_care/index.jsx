@@ -34,7 +34,7 @@ class IntesiveCare extends React.Component {
     beatCount: 0,
     resetHeartTime: false,
     oxygenLevel: 80,
-    urinAmount: 670,
+    urinAmount: 390,
     patient: undefined
   };
 
@@ -68,9 +68,15 @@ class IntesiveCare extends React.Component {
   };
 
   setUrinAmount = newAmount => {
-    this.setState({
-      urinAmount: this.state.urinAmount + newAmount
-    });
+    const { urinAmount } = this.state;
+
+    if (urinAmount + newAmount < 0) {
+      this.setState({urinAmount: 0});
+    } else {
+      this.setState({
+        urinAmount: this.state.urinAmount + newAmount
+      });
+    }
   };
 
   renderPatientSuggestions = patients => {
@@ -90,6 +96,7 @@ class IntesiveCare extends React.Component {
       patient: patients.find(p => p.id === patient.id),
       oxygenLevel: 80,
       beatCount: 0,
+      urinAmount: 670,
       resetHeartTime: true
     });
   };
@@ -130,7 +137,7 @@ class IntesiveCare extends React.Component {
     } = this.props;
 
     return (
-      <div>
+      <div style={{height: '100vh', overflowY: 'auto', paddingRight: '5px', overflowX: 'hidden'}}>
         <Header splash={false} size="small" float={false} fixed={false}>
           <AccessibleIcon />
           <Box flex={true} justify="end" direction="row" responsive={false}>

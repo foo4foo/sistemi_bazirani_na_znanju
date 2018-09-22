@@ -90,8 +90,30 @@ diabetes.symptoms << frequent_urination
 diabetes.symptoms << nausea
 diabetes.symptoms << vomiting
 
+nocturia = Symptom.create(name: "Nocturia")
+swallen_joints = Symptom.create(name: "Swallen Joins")
+respiratory_issues = Symptom.create(name: "Respiratory Issues")
+chest_pain = Symptom.create(name: "Chest Pain")
+
+chronic_kidney_disease.symptoms << tiredness
+chronic_kidney_disease.symptoms << nocturia
+chronic_kidney_disease.symptoms << swallen_joints
+chronic_kidney_disease.symptoms << respiratory_issues
+chronic_kidney_disease.symptoms << chest_pain
+
+post_operational_recovery = Symptom.create(name: "Post Operational Recovery")
+diarrhea = Symptom.create(name: "Diarrhea")
+
+acute_kidney_injury.symptoms << post_operational_recovery
+acute_kidney_injury.symptoms << tiredness
+acute_kidney_injury.symptoms << respiratory_issues
+acute_kidney_injury.symptoms << swallen_joints
+acute_kidney_injury.symptoms << diarrhea
+
 # Patients
 patient = Patient.create(first_name: 'Pera', last_name: 'Peric', email: 'pera@peric.com', birth_date: '05.09.1989.', height: 175.7, weight: 84)
+
+patient.illnesses << chronic_kidney_disease
 
 patient_file = PatientFile.create(patient: patient)
 

@@ -19,6 +19,12 @@ export class Navigation extends Component {
   getCurrentRoute = () => {
     return window.location.pathname;
   };
+
+  logout = () => {
+    localStorage.removeItem('jwt');
+    window.location.replace('/');
+  };
+
   render() {
     return (
       <Sidebar colorIndex="neutral-3" fixed={false} size="medium">
@@ -56,7 +62,7 @@ export class Navigation extends Component {
           </Menu>
         </Box>
         <Footer pad="medium">
-          <Anchor icon={<User colorIndex="light-1" />} label="Logout" />
+          <Anchor icon={<User colorIndex="light-1" />} label="Logout" onClick={this.logout} />
         </Footer>
       </Sidebar>
     );
