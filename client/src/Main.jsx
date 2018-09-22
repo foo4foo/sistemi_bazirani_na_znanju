@@ -32,31 +32,35 @@ class Main extends React.Component {
             <Switch>
               {localStorage.getItem("jwt") ? (
                 <Row>
-                  <Navigation />
-                  <Row className="home-container">
-                    <Col md={3} className="twitter-container">
-                      <Timeline
-                        dataSource={{
-                          sourceType: "profile",
-                          screenName: "health"
-                        }}
-                        options={{
-                          username: "TwitterDev"
-                        }}
-                        onLoad={() => console.log("Timeline is loaded!")}
-                      />
-                    </Col>
-                    <Col md={9}>
-                      <Route exact path="/" component={Home} />
-                      <Route exact path="/patients" component={Patients} />
-                      <Route exact path="/new_case" component={NewCase} />
-                      <Route
-                        exact
-                        path="/intesive_care"
-                        component={IntesiveCare}
-                      />
-                    </Col>
-                  </Row>
+                  <Col lg={3} md={3} sm={12}>
+                    <Navigation />
+                  </Col>
+                  <Col lg={9} md={9} sm={12}>
+                    <Row className="home-container">
+                      <Col md={3} className="twitter-container">
+                        <Timeline
+                          dataSource={{
+                            sourceType: "profile",
+                            screenName: "health"
+                          }}
+                          options={{
+                            username: "TwitterDev"
+                          }}
+                          onLoad={() => console.log("Timeline is loaded!")}
+                        />
+                      </Col>
+                      <Col md={9}>
+                        <Route exact path="/" component={Home} />
+                        <Route exact path="/patients" component={Patients} />
+                        <Route exact path="/new_case" component={NewCase} />
+                        <Route
+                          exact
+                          path="/intesive_care"
+                          component={IntesiveCare}
+                        />
+                      </Col>
+                    </Row>
+                  </Col>
                 </Row>
               ) : (
                 <Route exact path="/login" component={Login} />

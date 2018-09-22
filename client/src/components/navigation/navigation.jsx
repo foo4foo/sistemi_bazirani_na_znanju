@@ -16,6 +16,9 @@ import Box from "grommet/components/Box";
 import "./navigation.css";
 
 export class Navigation extends Component {
+  getCurrentRoute = () => {
+    return window.location.pathname;
+  };
   render() {
     return (
       <Sidebar colorIndex="neutral-3" fixed={false} size="medium">
@@ -27,14 +30,27 @@ export class Navigation extends Component {
             <Anchor
               icon={<HomeIcon />}
               href="/"
-              className="active"
+              className={this.getCurrentRoute() === "/" ? "active" : ""}
               label="Home"
             />
-            <Anchor icon={<GroupIcon />} href="/patients" label="Patients" />
-            <Anchor icon={<AidIcon />} href="/new_case" label="New Case" />
+            <Anchor
+              icon={<GroupIcon />}
+              href="/patients"
+              className={this.getCurrentRoute() === "/patients" ? "active" : ""}
+              label="Patients"
+            />
+            <Anchor
+              icon={<AidIcon />}
+              href="/new_case"
+              className={this.getCurrentRoute() === "/new_case" ? "active" : ""}
+              label="New Case"
+            />
             <Anchor
               icon={<GrowIcon />}
               href="/intesive_care"
+              className={
+                this.getCurrentRoute() === "/intesive_care" ? "active" : ""
+              }
               label="Intesive Care"
             />
           </Menu>
