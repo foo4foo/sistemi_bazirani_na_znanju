@@ -1,11 +1,11 @@
-class UsersController < ApplicationController
+class UsersController < ApiController
   skip_before_action :authenticate_user, only: %w[sign_in create verify]
   before_action :set_user, only: [:sign_in]
   before_action :passwords_match?, only: [:create]
   before_action :set_user_by_invitation_token, only: [:verify]
 
   def sign_in
-    if @user.password_valid?(user_params[:password])
+    if @user.password_valid?(params[:password])
       @token = JwtUtil.encode(@user)
       render 'sign_in', status: :ok
     else
@@ -24,6 +24,9 @@ class UsersController < ApplicationController
     else
       head :bad_request
     end
+  end
+
+  def sign_out
   end
 
   private

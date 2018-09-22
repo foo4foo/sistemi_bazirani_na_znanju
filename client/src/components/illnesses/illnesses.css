@@ -1,0 +1,17 @@
+.illnesses {
+  overflow-y: auto;
+}
+
+.illness {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.illness-name {
+  padding-left: 15px;
+}
+
+.illness-symptoms {
+  padding-left: 20px;
+}

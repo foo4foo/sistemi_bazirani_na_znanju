@@ -1,0 +1,11 @@
+.left-side {
+  position: fixed;
+  top: 0px;
+  bottom: 0px;
+  left: 0px;
+  right: 50%;
+}
+
+.house {
+  max-height: 100%;
+}

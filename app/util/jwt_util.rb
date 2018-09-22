@@ -20,7 +20,7 @@ class JwtUtil
 
   def self.user_data(user)
     {
-      id: user[:_id],
+      id: user[:id],
       email: user[:email],
       first_name: user[:first_name],
       last_name: user[:last_name],
